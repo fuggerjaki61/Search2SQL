@@ -26,7 +26,7 @@ public class MainTest {
         BasicTranslator translator = new BasicTranslator();
 
         // configure the table
-        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"),  new Column("text1", "text"),
+        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"),  new Column("date", "date"),
                 new Column("int", "int"));
 
         // print out help

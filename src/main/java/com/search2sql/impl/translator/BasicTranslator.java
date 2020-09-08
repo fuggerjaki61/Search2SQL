@@ -55,8 +55,30 @@ public class BasicTranslator extends Translator {
                 // "tableName.columnName = 'someValue' "
                 sql.append(" ");
 
-            //checks if parser is an IntParser
+                //checks if parser is an IntParser
             } else if ("int".equals(subQuery.getParserId()))  {
+                // comments describe how the query looks at which stage
+
+                // "tableName"
+                sql.append(query.getTableConfig().getName());
+
+                // "tableName."
+                sql.append(".");
+
+                // "tableName.columnName"
+                sql.append(subQuery.getColumnName());
+
+                // "tableName.columnName = "
+                sql.append(" = ");
+
+                // "tableName.columnName = someValue"
+                sql.append(subQuery.getValue());
+
+                // "tableName.columnName = someValue "
+                sql.append(" ");
+
+                //checks if parser is an IntParser
+            } else if ("date".equals(subQuery.getParserId()))  {
                 // comments describe how the query looks at which stage
 
                 // "tableName"

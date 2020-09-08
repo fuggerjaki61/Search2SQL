@@ -24,11 +24,14 @@ public class SubQuery {
     private String parserId;
 
     /**
+     * This string contains the current column name used for translation. This should be the exact same value as
+     * {@link com.search2sql.table.Column Column.name} (private).
+     */
+    private String columnName;
+
+    /**
      * This string contains information how to handle this sub-query. A <code>Parser</code> may add how it should
      * be translated.
-     * <br><br>
-     * <b>Example</b><br>
-     * {@link com.search2sql.impl.translator.FileTranslator}
      */
     private String type;
 
@@ -49,11 +52,29 @@ public class SubQuery {
      * This is a basic constructor that does nothing beside initializing values.
      *
      * @param parserId parser id
-     * @param type extra information for translation
-     * @param value parsed value
+     * @param type     extra information for translation
+     * @param value    parsed value
      */
     public SubQuery(String parserId, String type, Object value) {
         this.parserId = parserId;
+        this.type = type;
+        this.value = value;
+    }
+
+    /**
+     * This is a basic constructor that does nothing beside initializing values.
+     * <br /><br />
+     * This constructor will rather not be used because the column name is normally set after the parsing is finished.
+     * {@link SubQuery#SubQuery(String, String, Object)} should be used rather.
+     *
+     * @param parserId   parser id
+     * @param columnName the column name
+     * @param type       extra information for translation
+     * @param value      parsed value
+     */
+    public SubQuery(String parserId, String columnName, String type, Object value) {
+        this.parserId = parserId;
+        this.columnName = columnName;
         this.type = type;
         this.value = value;
     }
@@ -74,6 +95,24 @@ public class SubQuery {
      */
     public void setParserId(String parserId) {
         this.parserId = parserId;
+    }
+
+    /**
+     * Gets column name.
+     *
+     * @return the column name
+     */
+    public String getColumnName() {
+        return columnName;
+    }
+
+    /**
+     * Sets column name.
+     *
+     * @param columnName the column name
+     */
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
     }
 
     /**

@@ -7,37 +7,62 @@ import com.search2sql.table.TableConfig;
 
 import java.util.Scanner;
 
+/**
+ * This is a basic test class that contains a main method that can be run to type in a query that will be translated to
+ * sql.
+ * <br />
+ * The first iteration will always take 1-2s while every subsequent will take not more than 1ms.
+ */
 public class MainTest {
 
+    /**
+     * This will run a simple command line application.
+     */
     public static void main(String[] args) {
+        // instantiate a new scanner
         Scanner scanner = new Scanner(System.in);
 
+        // define a translator implementation
         BasicTranslator translator = new BasicTranslator();
-        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));
 
-        boolean exit = false;
+        // configure the table
+        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"),  new Column("text1", "text"),
+                new Column("int", "int"));
 
+        // print out help
         System.out.println("Type a search query or enter 'exit' to exit");
 
-        while (!exit) {
+        // runs forever
+        while (true) {
+            // prints arrow in front of input
             System.out.print("~> ");
+
+            // gets complete input and removes whitespaces from beginning and end
             String input = scanner.nextLine().trim();
 
+            // checks if user wants to exit
             if ("exit".equals(input)) {
-                exit = true;
+                // closes scanner
+                scanner.close();
+
+                // exits JVM and loop is stopped
+                System.exit(0);
             } else {
+                // gets current time in millis
                 long time = System.currentTimeMillis();
 
+                // interprets&translates input
                 String sql = translator.translate(new BasicInterpreter().interpret(input, tableConfig));
 
+                // gets time used for generating query
                 time = System.currentTimeMillis() - time;
 
-                System.out.format("\tInput: '%s'\n\tTime: '%d'\n\tSQL: '%s'", input, time, sql);
+                // outputs input, time taken and the generated sql query
+                System.out.format("\tInput: '%s'\n\tTime: '%dms'\n\tSQL: '%s'", input, time, sql);
             }
 
+            // prints new line
             System.out.println();
         }
-
-        scanner.close();
     }
 }

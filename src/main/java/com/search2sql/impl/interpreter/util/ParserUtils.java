@@ -8,7 +8,9 @@ import com.search2sql.table.TableConfig;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -31,12 +33,12 @@ public class ParserUtils {
      * @param config meta-information about the table
      * @return all valid parser specified by the TableConfig
      */
-    public static LinkedList<Parser> loadParser(TableConfig config) {
+    public static HashMap<String, Parser> loadParser(TableConfig config) {
         // all valid parser will be added here
-        LinkedList<Parser> parsers = new LinkedList<>();
+        HashMap<String, Parser> parsers = new HashMap<>();
 
         // finds parsers that were allowed in the TableConfig
-        LinkedList<String> allowedParsers = findAllowedParser(config);
+        HashMap<String, String> allowedParsers = findAllowedParser(config);
 
         // iterates over all classes that were found
         for (Class<?> clazz : annotatedClasses) {
@@ -46,13 +48,17 @@ public class ParserUtils {
             // checks if class is a child of Parser or any of its subclasses
             if (Parser.class.isAssignableFrom(clazz)) {
                 // checks if parser is allowed
-                if (allowedParsers.contains(annotation.value())) {
+                if (allowedParsers.containsValue(annotation.value())) {
                     // parser is allowed so it will be instantiate and added to the list
 
                     try {
                         Constructor<?> clazzConstructor = clazz.getConstructor();
 
-                        parsers.add((Parser) clazzConstructor.newInstance());
+                        for (Map.Entry<String, String> entry : allowedParsers.entrySet()) {
+                            if (entry.getValue().equals(annotation.value())) {
+                                parsers.put(entry.getKey() ,(Parser) clazzConstructor.newInstance());
+                            }
+                        }
                     } catch (Exception e) {
                         throw new InvalidParserException(String.format("The class '%s' defines the @SearchParser annotation" +
                                 "but it couldn't been initialized. Please check the attached error message.", clazz.getName()), e);
@@ -70,22 +76,23 @@ public class ParserUtils {
     }
 
     /**
-     * This method takes the TableConfig and iterates over every Column of it. It collects all parser ids specified by the
-     * column parser id.
+     * This method takes the TableConfig and iterates over every Column of it. It collects all column names and the
+     * associated parser id in a map.
      *
      * @param config meta-information about the table
-     * @return all allowed parser for this table
+     * @return all allowed parser with column names for this table
      */
-    public static LinkedList<String> findAllowedParser(TableConfig config) {
-        LinkedList<String> allowed = new LinkedList<>();
+    public static HashMap<String, String> findAllowedParser(TableConfig config) {
+        // instantiate new HashMap
+        HashMap<String, String> allowed = new HashMap<>();
 
         // iterates over every column
         for (Column column : config.getColumns()) {
-            // adds allowed id to list
-            allowed.add(column.getParserId());
+            // adds name and allowed id to it
+            allowed.put(column.getName(), column.getParserId());
         }
 
-        // all allowed parsers
+        // all allowed parsers with column names
         return allowed;
     }
 }

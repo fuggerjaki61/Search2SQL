@@ -19,6 +19,8 @@ public class MainTest {
      * This will run a simple command line application.
      */
     public static void main(String[] args) {
+        new Thread(BasicInterpreter::initializeParsers).start();
+
         // instantiate a new scanner
         Scanner scanner = new Scanner(System.in);
 
@@ -58,7 +60,7 @@ public class MainTest {
                 time = System.currentTimeMillis() - time;
 
                 // outputs input, time taken and the generated sql query
-                System.out.format("\tInput: '%s'\n\tTime: '%dms'\n\tSQL: '%s'", input, time, sql);
+                System.out.format("\tInput: \"%s\"\n\tTime: \"%dms\"\n\tSQL: \"%s\"", input, time, sql);
             }
 
             // prints new line

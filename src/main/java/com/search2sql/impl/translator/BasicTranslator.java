@@ -31,7 +31,7 @@ public class BasicTranslator extends Translator {
         // iterate over every sub-query
         for (SubQuery subQuery : query.getSubQueries()) {
             // checks if parser is a TextParser
-            if ("text".equals(subQuery.getParserId())) {
+            if ("text".equals(subQuery.getParserId()) || "date".equals(subQuery.getParserId()) || "quoted".equals(subQuery.getParserId())) {
                 // comments describe how the query looks at which stage
 
                 // "tableName"
@@ -77,29 +77,7 @@ public class BasicTranslator extends Translator {
                 // "tableName.columnName = someValue "
                 sql.append(" ");
 
-                //checks if parser is an IntParser
-            } else if ("date".equals(subQuery.getParserId()))  {
-                // comments describe how the query looks at which stage
-
-                // "tableName"
-                sql.append(query.getTableConfig().getName());
-
-                // "tableName."
-                sql.append(".");
-
-                // "tableName.columnName"
-                sql.append(subQuery.getColumnName());
-
-                // "tableName.columnName = "
-                sql.append(" = ");
-
-                // "tableName.columnName = someValue"
-                sql.append(subQuery.getValue());
-
-                // "tableName.columnName = someValue "
-                sql.append(" ");
-
-            // checks if query is a logical 'OR'
+                // checks if query is a logical 'OR'
             } else {
                 // adds 'OR ' to query
                 sql.append("OR ");

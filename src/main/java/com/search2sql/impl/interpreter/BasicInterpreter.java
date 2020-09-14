@@ -1,7 +1,7 @@
 package com.search2sql.impl.interpreter;
 
 import com.search2sql.exception.InvalidParserException;
-import com.search2sql.impl.interpreter.util.ParserUtils;
+import com.search2sql.impl.parser.QuotedParser;
 import com.search2sql.interpreter.Interpreter;
 import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;
@@ -11,10 +11,7 @@ import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
 import org.reflections.Reflections;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
 
 public class BasicInterpreter extends Interpreter {
@@ -26,9 +23,7 @@ public class BasicInterpreter extends Interpreter {
         // instantiate new query
         Query result = new Query(searchQuery, tableConfig);
 
-        // split by any whitespace(s) and iterate over it
-        for (String query : searchQuery.split("\\s+")) {
-
+        for (String query : splitQuery(searchQuery, tableConfig)) {
             for (Column column : tableConfig.getColumns()) {
                 Parser parser = loadParser(column);
 
@@ -47,15 +42,48 @@ public class BasicInterpreter extends Interpreter {
             }
         }
 
-        // last query must be a logic 'OR'
-        // query can't end with a logic 'OR' so it will be removed
         result.getSubQueries().removeLast();
 
         // return interpreted, complete Query
         return result;
     }
 
-    public static Parser loadParser(Column column) {
+    private LinkedList<String> splitQuery(String searchQuery, TableConfig config) {
+        LinkedList<String> list = new LinkedList<>();
+
+        LinkedList<Character> quotationChars = new LinkedList<>();
+
+        for (Column column : config.getColumns()) {
+            if ("quoted".equals(column.getParserId())) {
+                QuotedParser parser = (QuotedParser) loadParser(column);
+
+                quotationChars.add(parser.getQuotationChar());
+            }
+        }
+
+        boolean quote = false;
+        StringBuilder query = new StringBuilder();
+
+        for (char c : searchQuery.toCharArray()) {
+            if (c != ' ' || quote) {
+                if (quotationChars.contains(c)) {
+                    quote = !quote;
+                }
+
+                query.append(c);
+            } else if ((query.length() > 0)) {
+                list.add(query.toString());
+
+                query = new StringBuilder();
+            }
+        }
+
+        list.add(query.toString());
+
+        return list;
+    }
+
+    private Parser loadParser(Column column) {
         if (searchParsers == null) {
             initializeParsers();
         }
@@ -75,14 +103,14 @@ public class BasicInterpreter extends Interpreter {
             }
         }
 
-        return null;
+        throw new InvalidParserException(String.format("The parser with the id '%s' couldn't be found. Please check if the id is valid.", column.getParserId()));
     }
 
     public static void initializeParsers() {
         searchParsers = new Reflections().getTypesAnnotatedWith(SearchParser.class);
     }
 
-    private static void validateParser(Class<?> parser) {
+    private void validateParser(Class<?> parser) {
         if (!Parser.class.isAssignableFrom(parser)) {
             throw new InvalidParserException(String.format("The class '%s' defines the @SearchParser annotation " +
                     "but isn't a (in)direct sub class of 'com.search2sql.parser.Parser'.", parser.getName()));

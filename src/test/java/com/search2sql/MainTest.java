@@ -5,7 +5,7 @@ import com.search2sql.impl.translator.BasicTranslator;
 import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * This is a basic test class that contains a main method that can be run to type in a query that will be translated to
@@ -28,8 +28,7 @@ public class MainTest {
         BasicTranslator translator = new BasicTranslator();
 
         // configure the table
-        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"),  new Column("quoted", "quoted"),
-                new Column("int", "int"));
+        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));
 
         // print out help
         System.out.println("Type a search query or enter 'exit' to exit");
@@ -60,7 +59,7 @@ public class MainTest {
                 time = System.currentTimeMillis() - time;
 
                 // outputs input, time taken and the generated sql query
-                System.out.format("\tInput: \"%s\"\n\tTime: \"%dms\"\n\tSQL: \"%s\"", input, time, sql);
+                System.out.format("\tInput: %s\n\tTime: %dms\n\tSQL: %s", input, time, sql);
             }
 
             // prints new line

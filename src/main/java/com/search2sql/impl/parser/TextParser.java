@@ -12,19 +12,16 @@ import com.search2sql.parser.SearchParser;
  * This implementation parses literally everything that is not a whitespace.
  */
 @SearchParser("text")
-public class TextParser extends Parser {
+public class TextParser extends QuotedParser {
 
     /**
-     * This method checks if this sub-query is parsable by this parser.<br />
-     * This method matches everything that is not a whitespace.
      *
      * @param subQuery split part of the whole search query
      * @return boolean indicating if the sub-query is parsable
      */
     @Override
     public boolean isParserFor(String subQuery) {
-        // just check if the string is not empty
-        return subQuery.matches("[\\S]+");
+        return subQuery.matches("[\\S]+") || super.isParserFor(subQuery);
     }
 
     /**
@@ -36,6 +33,15 @@ public class TextParser extends Parser {
      */
     @Override
     public SubQuery parse(String subQuery) {
+        if (super.isParserFor(subQuery)) {
+            SubQuery query = super.parse(subQuery);
+
+            query.setParserId("text");
+            query.setType("quote");
+
+            return query;
+        }
+
         // just wraps parameter
         return new SubQuery("text", "simple", subQuery);
     }

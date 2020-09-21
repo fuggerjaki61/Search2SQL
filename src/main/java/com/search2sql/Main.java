@@ -6,6 +6,8 @@ import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is a basic test class that contains a main method that can be run to type in a query that will be translated to
@@ -13,7 +15,7 @@ import java.util.*;
  * <br />
  * The first iteration will always take 1-2s while every subsequent will take not more than 1ms.
  */
-public class MainTest {
+public class Main {
 
     /**
      * This will run a simple command line application.
@@ -31,7 +33,7 @@ public class MainTest {
         TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));
 
         // print out help
-        System.out.println("Type a search query or enter 'exit' to exit");
+        System.out.println("Type a search query, enter 'exit' to exit or set the table config with 'config [[\"name\", \"parserId\"], ...]'.");
 
         // runs forever
         while (true) {
@@ -48,6 +50,24 @@ public class MainTest {
 
                 // exits JVM and loop is stopped
                 System.exit(0);
+            } else if (input.matches("^config\\s+\\[.*]$")) {
+                tableConfig.setColumns(new ArrayList<>());
+
+                input = input.substring(6).trim();
+                input = input.substring(1, input.length() - 1);
+
+                Matcher m = Pattern.compile("\\[[^,]+,\\s*[^\\]]+]")
+                        .matcher(input);
+
+                while (m.find()) {
+                    String match = m.group();
+
+                    Matcher matcher = Pattern.compile("\\[(?<name>[^,]+),\\s*(?<parser>[^]]+)]").matcher(match);
+
+                    if (matcher.find()) {
+                        tableConfig.getColumns().add(new Column(matcher.group("name"), matcher.group("parser")));
+                    }
+                }
             } else {
                 // gets current time in millis
                 long time = System.currentTimeMillis();

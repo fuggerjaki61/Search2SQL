@@ -9,7 +9,7 @@ import com.search2sql.query.Query;
 import com.search2sql.query.SubQuery;
 import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
-import org.reflections.Reflections;
+import org.reflections8.Reflections;
 
 import java.util.HashSet;
 import java.util.LinkedList;

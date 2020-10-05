@@ -6,7 +6,7 @@
 
     <groupId>com.searchflow</groupId>
     <artifactId>SearchFlow</artifactId>
-    <version>0.0.1-rc1</version>
+    <version>0.1</version>
 
     <dependencies>
         <dependency>

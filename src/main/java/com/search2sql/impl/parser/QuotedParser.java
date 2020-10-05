@@ -1,10 +1,8 @@
 package com.search2sql.impl.parser;
 
 import com.search2sql.parser.Parser;
-import com.search2sql.parser.SearchParser;
 import com.search2sql.query.SubQuery;
 
-@SearchParser("quoted")
 public class QuotedParser extends Parser {
 
     private final char quotationChar;

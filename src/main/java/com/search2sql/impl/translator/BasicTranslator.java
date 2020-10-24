@@ -88,16 +88,4 @@ public class BasicTranslator extends Translator {
         // returns finished sql query
         return sql.toString().trim();
     }
-
-    /**
-     * <b>UNSUPPORTED</b><br />
-     * This feature is currently not supported. This feature will probably removed in later versions.
-     *
-     * @param query parsed & interpreted version of the basic string expression
-     * @return nothing but throws an exception
-     */
-    @Override
-    public String translateWithValue(Query query) {
-        throw new UnsupportedOperationException();
-    }
 }

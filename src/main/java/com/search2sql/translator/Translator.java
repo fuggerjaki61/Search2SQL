@@ -11,15 +11,9 @@ import com.search2sql.table.TableConfig;
  * <br />
  * <i>Note:</i> The <code>Translating</code> phase translates the parsed {@link Query} into usable sql.
  * <br />
- * This class is meant to be overwritten by the custom implementations. Every Translator must implement following
- * methods:
- * <ul>
- *     <li>{@link Translator#translate(Query)}</li>
- *     <li>{@link Translator#translateWithValue(Query)}</li>
- * </ul>
- * <b>Important</b><br />
- * These two methods sound very similar but only the core idea of them is the same. See the documentation of each method
- * before deciding which to use.
+ * This class is meant to be extended by the custom implementations. Every Translator must implement following
+ * method:<br />
+ * {@link Translator#translate(Query)}</li>
  * <br /><br />
  * The <code>translate()</code> method is targeted for the use of the {@link java.sql.PreparedStatement PreparedStatement}.
  * The <code>translateWithValue()</code> method is targeted for the use of the {@link java.sql.Statement Statement}.
@@ -31,7 +25,6 @@ import com.search2sql.table.TableConfig;
  * <b>See Also</b><br />
  * {@link Query com.searchflow.query.Query}<br />
  * {@link com.search2sql.query.SubQuery com.searchflow.query.SubQuery}<br />
- * {@link java.sql.Statement java.sql.Statement}<br />
  * {@link java.sql.PreparedStatement java.sql.PreparedStatement}<br />
  * {@link com.search2sql.interpreter.Interpreter com.searchflow.interpreter.Interpreter}<br />
  * {@link Parser com.searchflow.parser.Parser}
@@ -46,9 +39,6 @@ public abstract class Translator {
      * This method translates the given {@link Query} in a valid part of an sql query that can be used to filter/search
      * the output of that query.
      * <br /><br />
-     * <b>Important</b><br />
-     * This method looks similar to this method {@link Translator#translateWithValue(Query)} but it is NOT the same.
-     * <br /><br />
      * This method is targeted for the <i>safe</i> use with the {@link java.sql.PreparedStatement PreparedStatement}.
      * This method takes the parsed & interpreted {@link Query} with its list of split {@link com.search2sql.query.SubQuery SubQueries}
      * and then translates it to sql. The output can be different from implementation to implementation. Some implementations just
@@ -62,27 +52,6 @@ public abstract class Translator {
      * @return string containing usable sql (different for every implementation)
      */
     public abstract String translate(Query query);
-
-    /**
-     * This method translates the given {@link Query} in a valid part of an sql query that can be used to filter/search
-     * the output of that query.
-     * <br /><br />
-     * <b>Important</b><br />
-     * This method looks similar to this method {@link Translator#translate(Query)} but it is NOT the same.
-     * <br /><br />
-     * This method is targeted for the <i>unsafe</i> use with the {@link java.sql.Statement Statement}. This method takes
-     * the parsed & interpreted {@link Query} with its list of split {@link com.search2sql.query.SubQuery SubQueries} and
-     * then translates it to sql. This sql output can be different from implementation to implementation. Some implementations
-     * just return the search part of the query an other implementations return the whole usable query.<br />
-     * But all have on thing in common: the value is already inserted and thus cannot prevent an SQL-Injection attack
-     * from happening.<br />
-     * A possible output could be:<br />
-     * <code>WHERE table.column1 = 'HELLO WORLD!' AND table.column2 <= 22</code>
-     *
-     * @param query parsed & interpreted version of the basic string expression
-     * @return string containing usable sql (different for every implementation)
-     */
-    public abstract String translateWithValue(Query query);
 
     /**
      * This method is just an extension of the {@link Translator#translate(Query)} method. There is no need to override
@@ -127,61 +96,5 @@ public abstract class Translator {
         // second: translate it with the actual translation method
         // third: pass the result back
         return translate(interpreter.interpret(expression, column));
-    }
-
-    /**
-     * This method is just an extension of the {@link Translator#translateWithValue(Query)} and this is only used to provide a shortcut
-     * for less code.
-     * <br /><br />
-     * <b>Important</b><br />
-     * This method is not the same as {@link Translator#translate(Query)} and by using this method the effectiveness of an
-     * SQL-Injection is increased.
-     * <br /><br/>
-     * There is no need to override this method since it is already implemented by default. This method just calls the
-     * {@link Interpreter#interpret(String, TableConfig)} method to generate the {@link Query} and the forward it to the
-     * actual <code>translateWithValue()</code> method. Then the result is getting forwarded back to you.<br />
-     * The <code>Interpreter</code> that will be received as parameter will be used to interpret the expression.
-     * <br /><br />
-     * For more information see the documentation of the {@link Translator#translateWithValue(Query)} method and of the
-     * {@link Interpreter}.
-     *
-     * @param expression search expression that was entered by the user
-     * @param tableConfig configuration of the table
-     * @param interpreter interpreter used to interpret the expression
-     * @return string containing usable sql (different for every implementation)
-     */
-    public String translateWithValue(String expression, TableConfig tableConfig, Interpreter interpreter) {
-        // first: interpret the expression with the given interpreter
-        // second: translate it with the actual translation method
-        // third: pass the result back
-        return translateWithValue(interpreter.interpret(expression, tableConfig));
-    }
-
-    /**
-     * This method is just an extension of the {@link Translator#translateWithValue(Query)} (Query)} and this is only used to provide a shortcut
-     * for less code.
-     * <br /><br />
-     * <b>Important</b><br />
-     * This method is not the same as {@link Translator#translate(Query)} and by using this method the effectiveness of an
-     * SQL-Injection is increased.
-     * <br /><br/>
-     * There is no need to override this method since it is already implemented by default. This method just calls the
-     * {@link Interpreter#interpret(String, TableConfig)} method to generate the {@link Query} and the forward it to the
-     * actual <code>translateWithValue()</code> method. Then the result is getting forwarded back to you.<br />
-     * The <code>Interpreter</code> that will be received as parameter will be used to interpret the expression.
-     * <br /><br />
-     * For more information see the documentation of the {@link Translator#translateWithValue(Query)} method and of the
-     * {@link Interpreter}.
-     *
-     * @param expression search expression that was entered by the user
-     * @param column configuration of a single column
-     * @param interpreter interpreter used to interpret the expression
-     * @return string containing usable sql (different for every implementation)
-     */
-    public String translateWithValue(String expression, Column column, Interpreter interpreter) {
-        // first: interpret the expression with the given interpreter
-        // second: translate it with the actual translation method
-        // third: pass the result back
-        return translateWithValue(interpreter.interpret(expression, column));
     }
 }

@@ -2,8 +2,10 @@ package com.search2sql;
 
 import com.search2sql.impl.interpreter.BasicInterpreter;
 import com.search2sql.impl.translator.BasicTranslator;
+import com.search2sql.impl.translator.FileTranslator;
 import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
+import com.search2sql.translator.Translator;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -27,7 +29,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         // define a translator implementation
-        BasicTranslator translator = new BasicTranslator();
+        Translator translator = new FileTranslator();
 
         // configure the table
         TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));

@@ -38,7 +38,7 @@ public class BasicInterpreter extends Interpreter {
                     result.addSubQuery(subQuery);
 
                     // adds a logical 'OR' everytime a new sub-query was added
-                    result.addSubQuery(new SubQuery(null, "logic.connector", "or"));
+                    result.addSubQuery(new SubQuery(null, "logic.connector.or", null));
                 }
             }
         }

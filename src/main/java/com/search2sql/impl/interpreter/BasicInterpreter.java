@@ -1,6 +1,7 @@
 package com.search2sql.impl.interpreter;
 
 import com.search2sql.exception.InvalidParserException;
+import com.search2sql.impl.interpreter.util.ParserLoader;
 import com.search2sql.impl.parser.QuotedParser;
 import com.search2sql.interpreter.Interpreter;
 import com.search2sql.parser.Parser;
@@ -11,9 +12,7 @@ import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
 import org.reflections8.Reflections;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 public class BasicInterpreter extends Interpreter {
 
@@ -24,9 +23,17 @@ public class BasicInterpreter extends Interpreter {
         // instantiate new query
         Query result = new Query(searchQuery, tableConfig);
 
-        for (String query : splitQuery(searchQuery, tableConfig)) {
+        Map<String, Parser> parsers = new HashMap<>();
+
+        for (Column column : tableConfig.getColumns()) {
+            if (!parsers.containsKey(column.getParserId())) {
+                parsers.put(column.getParserId(), ParserLoader.getParser(column.getParserId()));
+            }
+        }
+
+        for (String query : splitQuery(searchQuery, parsers, tableConfig)) {
             for (Column column : tableConfig.getColumns()) {
-                Parser parser = loadParser(column);
+                Parser parser = parsers.get(column.getParserId());
 
                 if (parser.isParserFor(query)) {
                     SubQuery subQuery = parser.parse(query);
@@ -51,7 +58,7 @@ public class BasicInterpreter extends Interpreter {
         return result;
     }
 
-    private LinkedList<String> splitQuery(String searchQuery, TableConfig config) {
+    private LinkedList<String> splitQuery(String searchQuery, Map<String, Parser> parsers, TableConfig config) {
         // initialize result list
         LinkedList<String> list = new LinkedList<>();
 
@@ -61,7 +68,7 @@ public class BasicInterpreter extends Interpreter {
         // iterate over every column in config
         for (Column column : config.getColumns()) {
             // get parser for column
-            Parser parser = loadParser(column);
+            Parser parser = parsers.get(column.getParserId());
 
             // check if parser is subclass of QuotedParser
             if (QuotedParser.class.isAssignableFrom(parser.getClass())) {

@@ -14,6 +14,15 @@ import com.search2sql.parser.SearchParser;
 @SearchParser("text")
 public class TextParser extends QuotedParser {
 
+    private boolean quoted = true;
+
+    public TextParser() {
+    }
+
+    public TextParser(Boolean quoted) {
+        this.quoted = quoted;
+    }
+
     /**
      *
      * @param subQuery split part of the whole search query
@@ -33,7 +42,7 @@ public class TextParser extends QuotedParser {
      */
     @Override
     public SubQuery parse(String subQuery) {
-        if (super.isParserFor(subQuery)) {
+        if (super.isParserFor(subQuery) && quoted) {
             SubQuery query = super.parse(subQuery);
 
             query.setParserId("text");

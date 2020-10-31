@@ -30,7 +30,7 @@ public class Main {
         BasicTranslator translator = new BasicTranslator();
 
         // configure the table
-        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));
+        TableConfig tableConfig = new TableConfig("table", new Column("text", "text#false"), new Column("int", "int"));
 
         // print out help
         System.out.println("Type a search query, enter 'exit' to exit or set the table config with 'config [[\"name\", \"parserId\"], ...]'.");

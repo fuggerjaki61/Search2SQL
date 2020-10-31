@@ -5,17 +5,11 @@ import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;
 import org.reflections8.Reflections;
 
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Utility class that loads the classes that define the {@link SearchParser} annotation.
@@ -35,7 +29,7 @@ public class ParserLoader {
             throw new InvalidParserIdException("Id cannot be null.", new NullPointerException());
         }
 
-        Class<?> parser;
+        Class<?> parser = null;
         String name = null;
         String params = null;
 
@@ -47,13 +41,26 @@ public class ParserLoader {
         }
 
         for (Class<?> clazz : parsers) {
-            if (clazz.getSimpleName().equalsIgnoreCase(name)) {
+            if (clazz.getSimpleName().replaceAll("(?i)parser", "").equalsIgnoreCase(name)) {
                 parser = clazz;
                 break;
             }
         }
 
-        System.out.println(Arrays.deepToString(resolveParameters(params)));
+        Object[] param = resolveParameters(params);
+        Class<?>[] paramTypes = new Class<?>[param.length];
+
+        for (int i = 0; i < param.length; i++) {
+            paramTypes[i] = param[i].getClass();
+        }
+
+        try {
+            Constructor<?> constructor = parser.getConstructor(paramTypes);
+
+            return (Parser) constructor.newInstance(param);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }

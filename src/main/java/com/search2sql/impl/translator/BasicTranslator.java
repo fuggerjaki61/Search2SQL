@@ -5,10 +5,13 @@ import com.search2sql.query.SubQuery;
 import com.search2sql.translator.Translator;
 
 /**
- * This is a very basic implementation of {@link Translator}.
- * <br /><br />
+ * This is a very basic implementation of {@link Translator}.<br />
  * This implementation was just added for a little demo of the capabilities of this library.
+ * <br /><br />
+ * <b>Note</b><br />
+ * Use the {@link FileTranslator} if you want to experience the full power of this API.
  */
+@Deprecated
 public class BasicTranslator extends Translator {
 
     /**

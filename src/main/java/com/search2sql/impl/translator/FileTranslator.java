@@ -8,25 +8,56 @@ import com.search2sql.translator.Translator;
 import java.util.Properties;
 
 /**
- * This is a basic implementation of {@link Translator}.
+ * This is a better implementation of {@link Translator}.
+ * <br />
+ * The <code>FileTranslator</code> is a more advanced Translator than the deprecated
+ * {@link com.search2sql.impl.interpreter.BasicInterpreter BasicInterpreter}.
  * <br /><br />
- * This implementation loads the sql piece for each {@link SubQuery} out of a file and puts the pieces together to a full
- * sql string.
+ * This class translates the list of {@link SubQuery SubQueries} (wrapped in a {@link Query}) into sql. While doing this
+ * it reads how to translate those pieces into SQL from a file instead of hard-coding them. This also enables the simpler
+ * creation of custom <code>Parsers</code> because the user can add his own SQL pieces without creating an own translator.
+ * Additionally, this allows to change the given pieces (e. g. another SQL dialect) because the user can create an own
+ * <code>.properties</code> file that overwrites the provided pieces.
  */
 public class FileTranslator extends Translator {
 
-    private final Properties properties;
+    private final Properties props;
 
     /**
-     * Basic constructor that uses the {@link SqlPropertiesLoader} to initialize the Properties.
+     * This constructor initializes an {@link Properties} object based on the <code>sql.properties</code> file.
+     * This file will be used to load all pieces that help to translate the {@link Query} to an SQL string.
+     * <br /><br />
+     * <b>See Also</b><br />
+     * {@link FileTranslator#FileTranslator(String)} (defines a custom <code>.properties</code> file)
      */
     public FileTranslator() {
-        // load properties
-        properties = new SqlPropertiesLoader().getProperties();
+        // load base properties
+        props = SqlPropertiesLoader.getProperties("sql.properties");
     }
 
     /**
+     * This constructor does the same as {@link FileTranslator#FileTranslator()} (loads properties from <code>sql.properties</code>
+     * file). As an addition this constructor takes the path to another custom <code>.properties</code> file and the basic
+     * values with its values. Basically, this adds or overwrites (if existing) the key-value-pairs
      *
+     * @param customProperties
+     */
+    public FileTranslator(String customProperties) {
+        // load base properties
+        props = SqlPropertiesLoader.getProperties("sql.properties");
+
+        /*
+        add all custom properties defined in the user's properties file
+        if a value already exists it will be overwritten
+         */
+        props.putAll(SqlPropertiesLoader.getProperties(customProperties));
+    }
+
+    /**
+     * This method translates the given {@link SubQuery SubQueries} (wrapped in a {@link Query}) and translate them to
+     * SQL. This method will return a SQL-Injection safe string because the values are replaced with <code>?</code> (question
+     * mark's. Therefore this string should be used with a {@link java.sql.PreparedStatement PreparedStatement}. For more
+     * information see {@link Translator} or the documentation.
      *
      * @param query parsed & interpreted version of the basic string expression
      * @return translated sql string
@@ -38,8 +69,9 @@ public class FileTranslator extends Translator {
 
         // iterate over every SubQuery
         for (SubQuery subQuery : query.getSubQueries()) {
+
             // resolves the property key and loads the value
-            String property = (String) properties.get(resolvePropertyKey(subQuery.getParserId(), subQuery.getType()));
+            String property = (String) props.get(resolvePropertyKey(subQuery.getParserId(), subQuery.getType()));
 
             // checks if property exists
             if (property != null) {

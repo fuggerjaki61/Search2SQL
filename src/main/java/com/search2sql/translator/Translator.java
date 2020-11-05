@@ -16,7 +16,6 @@ import com.search2sql.table.TableConfig;
  * {@link Translator#translate(Query)}</li>
  * <br /><br />
  * The <code>translate()</code> method is targeted for the use of the {@link java.sql.PreparedStatement PreparedStatement}.
- * The <code>translateWithValue()</code> method is targeted for the use of the {@link java.sql.Statement Statement}.
  * It is recommended to use <code>translate()</code> with the <code>PreparedStatement</code> for safety issues due to the
  * resistance against SQL-Injection.
  * <br /><br />

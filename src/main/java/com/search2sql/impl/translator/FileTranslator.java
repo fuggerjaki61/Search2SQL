@@ -1,5 +1,6 @@
 package com.search2sql.impl.translator;
 
+import com.search2sql.exception.IllegalUseException;
 import com.search2sql.impl.translator.util.SqlPropertiesLoader;
 import com.search2sql.query.Query;
 import com.search2sql.query.SubQuery;
@@ -69,7 +70,6 @@ public class FileTranslator extends Translator {
 
         // iterate over every SubQuery
         for (SubQuery subQuery : query.getSubQueries()) {
-
             // resolves the property key and loads the value
             String property = (String) props.get(resolvePropertyKey(subQuery.getParserId(), subQuery.getType()));
 
@@ -81,7 +81,8 @@ public class FileTranslator extends Translator {
                 // appends a whitespace
                 sql.append(" ");
             } else {
-                // TODO better handling for missing value
+                throw new IllegalUseException(String.format("The property %s couldn't be found! Please" +
+                        "add it to your .properties file.", resolvePropertyKey(subQuery.getParserId(), subQuery.getType())));
             }
         }
 

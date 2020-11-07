@@ -1,6 +1,6 @@
 package com.search2sql.impl.interpreter;
 
-import com.search2sql.exception.InvalidParserException;
+import com.search2sql.exception.IllegalUseException;
 import com.search2sql.impl.interpreter.util.ParserLoader;
 import com.search2sql.impl.parser.QuotedParser;
 import com.search2sql.interpreter.Interpreter;
@@ -162,14 +162,14 @@ public class BasicInterpreter extends Interpreter {
                     return (Parser) clazz.getConstructor().newInstance();
                 } catch (Exception e) {
                     // there was one of many reasons why this class couldn't be initialized
-                    throw new InvalidParserException(String.format("The class '%s' defines the @SearchParser annotation" +
+                    throw new IllegalUseException(String.format("The class '%s' defines the @SearchParser annotation" +
                             "but it couldn't been initialized. Please check the attached error message.", clazz.getName()), e);
                 }
             }
         }
 
         // no parser could be found, so the id may be wrong
-        throw new InvalidParserException(String.format("The parser with the id '%s' couldn't be found. Please check if the id is valid.", column.getParserId()));
+        throw new IllegalUseException(String.format("The parser with the id '%s' couldn't be found. Please check if the id is valid.", column.getParserId()));
     }
 
 
@@ -183,7 +183,7 @@ public class BasicInterpreter extends Interpreter {
             /*
              * the class defines the @SearchParser annotation but does not extend the Parser class
              */
-            throw new InvalidParserException(String.format("The class '%s' defines the @SearchParser annotation " +
+            throw new IllegalUseException(String.format("The class '%s' defines the @SearchParser annotation " +
                     "but isn't a (in)direct sub class of 'com.search2sql.parser.Parser'.", parser.getName()));
         }
     }

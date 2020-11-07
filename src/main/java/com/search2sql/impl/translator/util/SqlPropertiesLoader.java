@@ -1,5 +1,7 @@
 package com.search2sql.impl.translator.util;
 
+import com.search2sql.exception.IllegalUseException;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -28,8 +30,7 @@ public class SqlPropertiesLoader {
             //loads properties from file located in the resources
             properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(name));
         } catch (IOException e) {
-            // TODO exception handling
-            e.printStackTrace();
+            throw new IllegalUseException(String.format("There was a problem while loading '%s' file.", name), e);
         }
 
         // return loaded properties

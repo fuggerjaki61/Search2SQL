@@ -1,5 +1,6 @@
 package com.search2sql.interpreter;
 
+import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;
 import com.search2sql.query.Query;
@@ -69,7 +70,7 @@ public abstract class Interpreter {
      * @param tableConfig meta-information about the table (column types, etc.)
      * @return parsed & interpreted form of the search query
      */
-    public abstract Query interpret(String searchQuery, TableConfig tableConfig);
+    public abstract Query interpret(String searchQuery, TableConfig tableConfig) throws InvalidSearchException;
 
     /**
      * This method just provides a shortcut for the usage of a single column interpretation.
@@ -82,7 +83,7 @@ public abstract class Interpreter {
      * @param column meta-information about the column type
      * @return parsed & interpreted form of the search query
      */
-    public Query interpret(String searchQuery, Column column) {
+    public Query interpret(String searchQuery, Column column) throws InvalidSearchException {
         return interpret(searchQuery, new TableConfig(column));
     }
 }

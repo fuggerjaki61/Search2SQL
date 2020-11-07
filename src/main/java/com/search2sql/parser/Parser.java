@@ -1,5 +1,6 @@
 package com.search2sql.parser;
 
+import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.query.SubQuery;
 
 /**
@@ -47,7 +48,7 @@ public abstract class Parser {
      * @param subQuery split part of the whole search query
      * @return boolean indicating if this parser can be used to parse this sub-query
      */
-    public abstract boolean isParserFor(String subQuery);
+    public abstract boolean isParserFor(String subQuery) throws InvalidSearchException;
 
     /**
      * This method is essential for the first phase <code>Parsing</code>.
@@ -63,5 +64,5 @@ public abstract class Parser {
      * @param subQuery split part of the whole search query
      * @return parsed, more complex form of this sub-query
      */
-    public abstract SubQuery parse(String subQuery);
+    public abstract SubQuery parse(String subQuery) throws InvalidSearchException;
 }

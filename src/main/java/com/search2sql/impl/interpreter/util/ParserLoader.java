@@ -1,6 +1,6 @@
 package com.search2sql.impl.interpreter.util;
 
-import com.search2sql.exception.InvalidParserIdException;
+import com.search2sql.exception.IllegalUseException;
 import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;
 import org.reflections8.Reflections;
@@ -26,7 +26,7 @@ public class ParserLoader {
 
     public static Parser getParser(String id) {
         if (id == null) {
-            throw new InvalidParserIdException("Id cannot be null.", new NullPointerException());
+            throw new IllegalUseException("Parser id cannot be null.");
         }
 
         Class<?> parser = null;

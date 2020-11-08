@@ -12,6 +12,9 @@ import java.util.LinkedList;
  * This class saves the original string search query, the meta-information about the table layout and a list of the split
  * {@link SubQuery SubQueries}. In the <code>Interpreting</code> phase the original string search query was split into
  * its smallest parts and saved in a list.
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 public class Query {
 

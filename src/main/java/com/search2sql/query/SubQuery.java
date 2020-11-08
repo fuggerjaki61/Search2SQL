@@ -15,6 +15,9 @@ import com.search2sql.parser.Parser;
  * {@link Parser com.searchflow.parser.Parser}<br>
  * {@link com.search2sql.interpreter.Interpreter com.searchflow.interpreter.Interpreter}<br>
  * {@link com.search2sql.translator.Translator com.searchflow.translator.Translator}
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 public class SubQuery {
 

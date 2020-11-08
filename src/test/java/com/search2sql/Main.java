@@ -1,5 +1,6 @@
 package com.search2sql;
 
+import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.impl.interpreter.BasicInterpreter;
 import com.search2sql.impl.translator.BasicTranslator;
 import com.search2sql.impl.translator.FileTranslator;
@@ -23,8 +24,6 @@ public class Main {
      * This will run a simple command line application.
      */
     public static void main(String[] args) {
-        new Thread(BasicInterpreter::initializeParsers).start();
-
         // instantiate a new scanner
         Scanner scanner = new Scanner(System.in);
 
@@ -75,7 +74,13 @@ public class Main {
                 long time = System.currentTimeMillis();
 
                 // interprets&translates input
-                String sql = translator.translate(new BasicInterpreter().interpret(input, tableConfig));
+                String sql = null;
+
+                try {
+                    sql = translator.translate(new BasicInterpreter().interpret(input, tableConfig));
+                } catch (InvalidSearchException e) {
+                    e.printStackTrace();
+                }
 
                 // gets time used for generating query
                 time = System.currentTimeMillis() - time;

@@ -11,6 +11,9 @@ import java.util.Properties;
  * <br /><br />
  * This class provides a static method {@link SqlPropertiesLoader#getProperties(String)} to load the properties out of any
  * <code>.properties</code> file located in the <code>resources</code> of your application.
+ *
+ * @author fuggerjaki61
+ * @since 1.0-echo
  */
 public class SqlPropertiesLoader {
 

@@ -1,5 +1,6 @@
 package com.search2sql.translator;
 
+import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.parser.Parser;
 import com.search2sql.interpreter.Interpreter;
 import com.search2sql.query.Query;
@@ -31,6 +32,9 @@ import com.search2sql.table.TableConfig;
  * <b>Known Implementations</b><br />
  * {@link com.search2sql.impl.translator.FileTranslator com.searchflow.impl.translator.FileTranslator}<br />
  * {@link com.search2sql.impl.translator.BasicTranslator com.searchflow.impl.translator.BasicTranslator}
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 public abstract class Translator {
 
@@ -67,7 +71,7 @@ public abstract class Translator {
      * @param interpreter interpreter used to interpret the expression
      * @return string containing usable sql (different for every implementation)
      */
-    public String translate(String expression, TableConfig tableConfig, Interpreter interpreter) {
+    public String translate(String expression, TableConfig tableConfig, Interpreter interpreter) throws InvalidSearchException {
         // first: interpret the expression with the given interpreter
         // second: translate it with the actual translation method
         // third: pass the result back
@@ -90,7 +94,7 @@ public abstract class Translator {
      * @param interpreter interpreter used to interpret the expression
      * @return string containing usable sql (different for every implementation)
      */
-    public String translate(String expression, Column column, Interpreter interpreter) {
+    public String translate(String expression, Column column, Interpreter interpreter) throws InvalidSearchException {
         // first: interpret the expression with the given interpreter
         // second: translate it with the actual translation method
         // third: pass the result back

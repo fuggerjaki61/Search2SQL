@@ -1,44 +1,78 @@
 package com.search2sql.impl.interpreter;
 
-import com.search2sql.exception.IllegalUseException;
+import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.impl.interpreter.util.ParserLoader;
 import com.search2sql.impl.parser.QuotedParser;
 import com.search2sql.interpreter.Interpreter;
 import com.search2sql.parser.Parser;
-import com.search2sql.parser.SearchParser;
 import com.search2sql.query.Query;
 import com.search2sql.query.SubQuery;
 import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
-import org.reflections8.Reflections;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
 
+/**
+ * <code>BasicInterpreter</code> is a basic implementation of {@link Interpreter}. This interpreter splits the search
+ * expression and let {@link Parser Parsers} parse them.
+ * <br /><br />
+ * This Interpreter splits the search expression by any whitespaces except the interpreter notices a quote. Quotes can
+ * be started with any single char but it is recommended that it is a special character like <code>"</code> or
+ * <code>'</code>. These special characters are defined over the {@link QuotedParser} and any subclass of it
+ * (e.g. {@link com.search2sql.impl.parser.TextParser TextParser}). After the query was split, the generated sub-queries
+ * are processed. Every parser will try to parse every sub-query. Therefore an 11 can be parsed as a number or as text.
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
+ */
 public class BasicInterpreter extends Interpreter {
 
-    protected static Set<Class<?>> searchParsers;
-
+    /**
+     * This is the implementation of the {@link Interpreter#interpret(String, TableConfig)} method. This method is
+     * responsible for all actions happening that are visible. This method takes the original string search expression
+     * and the {@link TableConfig} and splits the string in good editable sub-queries. These will be parsed by the responding
+     * parser(s) and finally be added to the Query. After each successful parsing, a logical <code>OR</code> will be added.
+     * For more information see {@link BasicInterpreter}.
+     *
+     * @param searchQuery simple string form of the search query
+     * @param tableConfig meta-information about the table (column types, etc.)
+     * @return parsed & interpreted Query
+     * @throws InvalidSearchException thrown if there was a problem with the search
+     */
     @Override
-    public Query interpret(String searchQuery, TableConfig tableConfig) {
+    public Query interpret(String searchQuery, TableConfig tableConfig) throws InvalidSearchException {
         // instantiate new query
         Query result = new Query(searchQuery, tableConfig);
 
+        // initialize new map with id and its loaded parsers
+        // this map saves all parsers with its id so it has only to loaded once
         Map<String, Parser> parsers = new HashMap<>();
 
+        // iterate over all parsers
         for (Column column : tableConfig.getColumns()) {
+            // check if parser already exists
             if (!parsers.containsKey(column.getParserId())) {
+                // if not, load and add it
                 parsers.put(column.getParserId(), ParserLoader.getParser(column.getParserId()));
             }
         }
 
+        // iterate over every split query
         for (String query : splitQuery(searchQuery, parsers, tableConfig)) {
+            // iterate over every column
             for (Column column : tableConfig.getColumns()) {
+                // get the responding parser for the column
                 Parser parser = parsers.get(column.getParserId());
 
+                // check if the parser can parse the query
                 if (parser.isParserFor(query)) {
+                    // it can, so parse it
                     SubQuery subQuery = parser.parse(query);
 
-                    // set the column name
+                    // add metadata for translation
                     subQuery.setColumnName(column.getName());
 
                     // add the query to the list
@@ -50,7 +84,9 @@ public class BasicInterpreter extends Interpreter {
             }
         }
 
+        // checks if there is a result
         if (!result.getSubQueries().isEmpty()) {
+            // there are results, but the last one is always an 'OR'
             result.getSubQueries().removeLast();
         }
 
@@ -138,53 +174,7 @@ public class BasicInterpreter extends Interpreter {
             list.add(query.toString());
         }
 
+        // return fully split list
         return list;
-    }
-
-    private Parser loadParser(Column column) {
-        // lazy load the list of parsers
-        if (searchParsers == null) {
-            initializeParsers();
-        }
-
-        // iterates over every class defining the @SearchParser annotation
-        for (Class<?> clazz : searchParsers) {
-            // finds the @SearchParser annotation
-            SearchParser parserAnnotation = clazz.getAnnotation(SearchParser.class);
-
-            // checks if the annotation parser id and the column parser id are equal
-            if (parserAnnotation.value().equals(column.getParserId())) {
-                // validates parser and throws RunTimeException if not
-                validateParser(clazz);
-
-                try {
-                    // return a new instance
-                    return (Parser) clazz.getConstructor().newInstance();
-                } catch (Exception e) {
-                    // there was one of many reasons why this class couldn't be initialized
-                    throw new IllegalUseException(String.format("The class '%s' defines the @SearchParser annotation" +
-                            "but it couldn't been initialized. Please check the attached error message.", clazz.getName()), e);
-                }
-            }
-        }
-
-        // no parser could be found, so the id may be wrong
-        throw new IllegalUseException(String.format("The parser with the id '%s' couldn't be found. Please check if the id is valid.", column.getParserId()));
-    }
-
-
-    public static void initializeParsers() {
-        // basically just searches all classes defining the @SearchParser annotation
-        searchParsers = new Reflections().getTypesAnnotatedWith(SearchParser.class);
-    }
-
-    private void validateParser(Class<?> parser) {
-        if (!Parser.class.isAssignableFrom(parser)) {
-            /*
-             * the class defines the @SearchParser annotation but does not extend the Parser class
-             */
-            throw new IllegalUseException(String.format("The class '%s' defines the @SearchParser annotation " +
-                    "but isn't a (in)direct sub class of 'com.search2sql.parser.Parser'.", parser.getName()));
-        }
     }
 }

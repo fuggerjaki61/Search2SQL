@@ -19,6 +19,9 @@ import java.util.Properties;
  * creation of custom <code>Parsers</code> because the user can add his own SQL pieces without creating an own translator.
  * Additionally, this allows to change the given pieces (e. g. another SQL dialect) because the user can create an own
  * <code>.properties</code> file that overwrites the provided pieces.
+ *
+ * @author fuggerjaki61
+ * @since 1.0-echo
  */
 public class FileTranslator extends Translator {
 

@@ -9,6 +9,9 @@ import java.util.Arrays;
  * server-side table. This is used in the <code>Interpreting</code> phase to check which sub-query is for which column and
  * to check which <code>Parsers</code> can be used. Also this is used in the <code>Translating</code> phase to check how
  * to name the columns and to know how the table looks like.
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 public class TableConfig {
 

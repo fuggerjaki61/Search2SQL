@@ -16,6 +16,9 @@ package com.search2sql.table;
  *         as default if sub-query is not identifiable in a multi-column table config
  *     </li>
  * </ul>
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 public class Column {
 

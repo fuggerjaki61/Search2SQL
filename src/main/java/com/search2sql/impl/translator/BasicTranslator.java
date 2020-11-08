@@ -10,6 +10,9 @@ import com.search2sql.translator.Translator;
  * <br /><br />
  * <b>Note</b><br />
  * Use the {@link FileTranslator} if you want to experience the full power of this API.
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 @Deprecated
 public class BasicTranslator extends Translator {

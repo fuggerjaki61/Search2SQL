@@ -29,6 +29,9 @@ import java.lang.annotation.*;
  * <i>Overall Documentation</i><br>
  * {@link Parser com.searchflow.parser.Parser}<br>
  * {@link com.search2sql.interpreter.Interpreter}
+ *
+ * @author fuggerjaki61
+ * @since 0.0.1
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

@@ -66,7 +66,7 @@ public class SubQuery {
 
     /**
      * This is a basic constructor that does nothing beside initializing values.
-     * <br /><br />
+     * <br><br>
      * This constructor will rather not be used because the column name is normally set after the parsing is finished.
      * {@link SubQuery#SubQuery(String, String, Object)} should be used rather.
      *

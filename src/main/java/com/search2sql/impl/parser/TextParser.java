@@ -6,9 +6,9 @@ import com.search2sql.parser.SearchParser;
 
 /**
  * This is a default implementation of the {@link Parser}. This parser is for parsing any strings.
- * <br /><br />
+ * <br><br>
  * This implementation has no settings.
- * <br /><br />
+ * <br><br>
  * This implementation parses literally everything that is not a whitespace.
  *
  * @author fuggerjaki61

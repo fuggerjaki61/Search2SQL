@@ -5,10 +5,10 @@ import com.search2sql.query.SubQuery;
 import com.search2sql.translator.Translator;
 
 /**
- * This is a very basic implementation of {@link Translator}.<br />
+ * This is a very basic implementation of {@link Translator}.<br>
  * This implementation was just added for a little demo of the capabilities of this library.
- * <br /><br />
- * <b>Note</b><br />
+ * <br><br>
+ * <b>Note</b><br>
  * Use the {@link FileTranslator} if you want to experience the full power of this API.
  *
  * @author fuggerjaki61
@@ -18,15 +18,15 @@ import com.search2sql.translator.Translator;
 public class BasicTranslator extends Translator {
 
     /**
-     * <b>Note</b><br />
+     * <b>Note</b><br>
      * As already said in the documentation of this class (see {@link BasicTranslator}) this is just a small demo.
      * For this reason the <code>translate()</code> method does NOT replace the value with a <code>?</code> (question mark)
      * it will add them as plain text.
-     * <br /><br />
+     * <br><br>
      * Normally this method would replace all sql values with <code>?</code> (question marks). For testing purposes this
      * method inserts the values as <i>plain</i> text.
      *
-     * @param query parsed & interpreted version of the basic string expression
+     * @param query parsed and interpreted version of the basic string expression
      * @return sql query WITH values inserted
      */
     @Override

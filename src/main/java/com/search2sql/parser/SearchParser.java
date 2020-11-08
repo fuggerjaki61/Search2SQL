@@ -53,6 +53,8 @@ public @interface SearchParser {
      * <b>Note</b><br>
      * The name of this attribute is chosen because <code>value</code> is the default attribute name and the value can
      * be set without extra specifying its name.
+     *
+     * @return id of the parser
      */
     String value();
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * <code>BasicInterpreter</code> is a basic implementation of {@link Interpreter}. This interpreter splits the search
  * expression and let {@link Parser Parsers} parse them.
- * <br /><br />
+ * <br><br>
  * This Interpreter splits the search expression by any whitespaces except the interpreter notices a quote. Quotes can
  * be started with any single char but it is recommended that it is a special character like <code>"</code> or
  * <code>'</code>. These special characters are defined over the {@link QuotedParser} and any subclass of it
@@ -39,7 +39,7 @@ public class BasicInterpreter extends Interpreter {
      *
      * @param searchQuery simple string form of the search query
      * @param tableConfig meta-information about the table (column types, etc.)
-     * @return parsed & interpreted Query
+     * @return parsed and interpreted Query
      * @throws InvalidSearchException thrown if there was a problem with the search
      */
     @Override

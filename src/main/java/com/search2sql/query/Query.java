@@ -31,7 +31,7 @@ public class Query {
     private TableConfig tableConfig;
 
     /**
-     * This is the <i>parsed & interpreted, split sub-queries</i>.<br>
+     * This is the <i>parsed and interpreted, split sub-queries</i>.<br>
      * This list was generated in the <code>Interpreting</code> phase and is the most important information
      * transmitted.
      */
@@ -61,7 +61,7 @@ public class Query {
      *
      * @param original original string search query
      * @param tableConfig meta-information about the table layout
-     * @param subQueries parsed & interpreted, split sub-queries
+     * @param subQueries parsed and interpreted, split sub-queries
      */
     public Query(String original, TableConfig tableConfig, LinkedList<SubQuery> subQueries) {
         this.original = original;
@@ -70,7 +70,7 @@ public class Query {
     }
 
     /**
-     * This method just provides a shortcut to add SubQueries more easily.<br />
+     * This method just provides a shortcut to add SubQueries more easily.<br>
      * This method can just be used and no list must be added.
      *
      * @param query SubQuery that should be added to list

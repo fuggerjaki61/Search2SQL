@@ -14,16 +14,16 @@ import java.util.Locale;
 
 /**
  * This is a default implementation of the {@link Parser}. This parser is for parsing dates with the german format.
- * <br /><br />
+ * <br><br>
  * This implementation has no settings.
- * <br /><br />
+ * <br><br>
  * This implementation parses every date with the german format <code>dd.mm.yyyy</code>.
  */
 @SearchParser("date")
 public class DateParser extends Parser {
 
     /**
-     * This method checks if this sub-query is parsable by this parser.<br />
+     * This method checks if this sub-query is parsable by this parser.<br>
      * This method will every match every date with the german format.s
      *
      * @param subQuery split part of the whole search query

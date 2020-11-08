@@ -10,10 +10,10 @@ import java.util.Properties;
 
 /**
  * This is a better implementation of {@link Translator}.
- * <br />
+ * <br>
  * The <code>FileTranslator</code> is a more advanced Translator than the deprecated
  * {@link com.search2sql.impl.interpreter.BasicInterpreter BasicInterpreter}.
- * <br /><br />
+ * <br><br>
  * This class translates the list of {@link SubQuery SubQueries} (wrapped in a {@link Query}) into sql. While doing this
  * it reads how to translate those pieces into SQL from a file instead of hard-coding them. This also enables the simpler
  * creation of custom <code>Parsers</code> because the user can add his own SQL pieces without creating an own translator.
@@ -30,8 +30,8 @@ public class FileTranslator extends Translator {
     /**
      * This constructor initializes an {@link Properties} object based on the <code>sql.properties</code> file.
      * This file will be used to load all pieces that help to translate the {@link Query} to an SQL string.
-     * <br /><br />
-     * <b>See Also</b><br />
+     * <br><br>
+     * <b>See Also</b><br>
      * {@link FileTranslator#FileTranslator(String)} (defines a custom <code>.properties</code> file)
      */
     public FileTranslator() {
@@ -44,7 +44,7 @@ public class FileTranslator extends Translator {
      * file). As an addition this constructor takes the path to another custom <code>.properties</code> file and the basic
      * values with its values. Basically, this adds or overwrites (if existing) the key-value-pairs
      *
-     * @param customProperties
+     * @param customProperties path to the .properties file relative to the resources
      */
     public FileTranslator(String customProperties) {
         // load base properties
@@ -63,7 +63,7 @@ public class FileTranslator extends Translator {
      * mark's. Therefore this string should be used with a {@link java.sql.PreparedStatement PreparedStatement}. For more
      * information see {@link Translator} or the documentation.
      *
-     * @param query parsed & interpreted version of the basic string expression
+     * @param query parsed and interpreted version of the basic string expression
      * @return translated sql string
      */
     @Override
@@ -94,13 +94,13 @@ public class FileTranslator extends Translator {
     }
 
     /**
-     * This method resolves the property key to load the value for the current SearchQuery.<br />
-     * The key consists of following pieces:<br />
-     * <code>parserId.type(.subType)</code><br />
+     * This method resolves the property key to load the value for the current SearchQuery.<br>
+     * The key consists of following pieces:<br>
+     * <code>parserId.type(.subType)</code><br>
      * <code>subType</code> is not an attribute of SearchQuery. The subType is saved in the <code>type</code> attribute
-     * and therefore is only an utility for better grouping. There can also be multiple subTypes.<br />
+     * and therefore is only an utility for better grouping. There can also be multiple subTypes.<br>
      * It is also possible that the parserId value is null/empty. In this case the parserId will be ignored. As example
-     * SubQueries added while interpreting (logic connectors, etc.) are permitted to not specify a parser id.<br />
+     * SubQueries added while interpreting (logic connectors, etc.) are permitted to not specify a parser id.<br>
      * If a parser only has one type the type attribute can be null/empty and will be ignored.
      *
      * @param parserId id of the parser

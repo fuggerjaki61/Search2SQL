@@ -2,12 +2,12 @@ package com.search2sql.exception;
 
 /**
  * <code>InvalidSearchException</code> is thrown if any error occurred that affects the end-user.
- * <br /><br />
+ * <br><br>
  * This exception should only be thrown by {@link com.search2sql.parser.Parser Parsers} or
  * {@link com.search2sql.interpreter.Interpreter Interpreters}. This exception should be caught and shown to the end-user.
- * The end-user should see a summary and/or detailed description of the problem and <i>how to solve it</i>.<br />
+ * The end-user should see a summary and/or detailed description of the problem and <i>how to solve it</i>.<br>
  * This exception provides an unique error code and an (not yet i18n) string that is provided by the library.
- * <br /><br />
+ * <br><br>
  * <i>In case the end-user can't fix the exception</i> the {@link IllegalUseException} should be used.
  *
  * @author fuggerjaki61
@@ -39,7 +39,7 @@ public class InvalidSearchException extends Exception {
     }
 
     /**
-     * <b>NOT WORKING</b><br />
+     * <b>NOT WORKING</b><br>
      * The i18n string isn't supported yet.
      *
      * @return null

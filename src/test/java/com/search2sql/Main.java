@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * This is a basic test class that contains a main method that can be run to type in a query that will be translated to
  * sql.
- * <br />
+ * <br>
  * The first iteration will always take 1-2s while every subsequent will take not more than 1ms.
  */
 public class Main {

@@ -50,6 +50,7 @@ public abstract class Parser {
      *
      * @param subQuery split part of the whole search query
      * @return boolean indicating if this parser can be used to parse this sub-query
+     * @throws InvalidSearchException thrown if a problem occurred while parsing
      */
     public abstract boolean isParserFor(String subQuery) throws InvalidSearchException;
 
@@ -66,6 +67,7 @@ public abstract class Parser {
      *
      * @param subQuery split part of the whole search query
      * @return parsed, more complex form of this sub-query
+     * @throws InvalidSearchException thrown if a problem occurred while parsing
      */
     public abstract SubQuery parse(String subQuery) throws InvalidSearchException;
 }

@@ -12,21 +12,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <coce>ParserLoader</coce> is an utility class that loads the parser specified by an id.
- * <br /><br />
+ * <code>ParserLoader</code> is an utility class that loads the parser specified by an id.
+ * <br><br>
  * This class may be used by any implementation of {@link com.search2sql.interpreter.Interpreter Interpreter}. The main
  * purpose of this class is to load and construct an object of the {@link Parser} class. The list of classes that define
  * the {@link SearchParser @SearchParser} annotation is loaded in the <code>static</code> block of this class. To trigger
- * this <code>static</code> block you can use:<br /><br />
+ * this <code>static</code> block you can use:<br><br>
  * <code>Class.forName("com.search2sql.impl.interpreter.util.ParserLoader");</code>
- * <br /><br />
+ * <br><br>
  * Executing this statement before the first use of the API, reduces the first call time (first call time without this:
  * <code>~ 1000ms</code>, average call time: <code>~ 1ms</code>) to the average call time.
- * <br /><br />
+ * <br><br>
  * Another feature that was added in version <i>1.0-echo</i> are <i>parameterized parsers</i>. These parameters are added
  * to the parser id after a <code>#</code> (hashtag). The constructor that will create a new instance is chosen based on
  * these parameters. This could be an example for a parser id with parameters:
- * <br /><br />
+ * <br><br>
  * <code>text#false</code>
  *
  * @author fuggerjaki61

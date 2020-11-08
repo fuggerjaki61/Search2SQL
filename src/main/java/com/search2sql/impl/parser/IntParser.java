@@ -12,9 +12,9 @@ public class IntParser extends Parser {
 
     /**
      * This method is a simple implementation just to check if the string can be parsed as a number.
-     * Depending on the settings these numbers are allowed:<br />
-     * <code>42</code> (interpreted as positive by default)<br />
-     * <code>-42</code> (depending if <code>negative</code> is set to true)<br />
+     * Depending on the settings these numbers are allowed:<br>
+     * <code>42</code> (interpreted as positive by default)<br>
+     * <code>-42</code> (depending if <code>negative</code> is set to true)<br>
      * <code>+42</code>
      *
      * @param subQuery split part of the whole search query

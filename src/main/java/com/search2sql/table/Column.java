@@ -39,13 +39,13 @@ public class Column {
     private boolean primary;
 
     /**
-     * <b>Important</b><br />
+     * <b>Important</b><br>
      * This constructors purpose is to minimize the parameter list by initializing the <code>primary</code> field with the
      * value <code>false</code> as default.
-     * <br /><br />
-     * <b>See Also</b><br />
-     * {@link Column}<br />
-     * {@link Column#Column(String, String, boolean)}<br />
+     * <br><br>
+     * <b>See Also</b><br>
+     * {@link Column}<br>
+     * {@link Column#Column(String, String, boolean)}<br>
      *
      * @param name     the name
      * @param parserId the parser id
@@ -58,10 +58,10 @@ public class Column {
 
     /**
      * This is a basic constructor just setting the fields' values by the parameters' values.
-     * <br /><br />
-     * <b>See Also</b><br />
-     * {@link Column}<br />
-     * {@link Column#Column(String, String)}<br />
+     * <br><br>
+     * <b>See Also</b><br>
+     * {@link Column}<br>
+     * {@link Column#Column(String, String)}<br>
      *
      * @param name     the name
      * @param parserId the parser id

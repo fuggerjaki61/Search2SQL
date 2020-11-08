@@ -4,9 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.searchflow</groupId>
-    <artifactId>SearchFlow</artifactId>
-    <version>0.1</version>
+    <groupId>com.search2sql</groupId>
+    <artifactId>Search2SQL</artifactId>
+    <version>1.0-echo</version>
+    <packaging>jar</packaging>
+
+    <name>Search2SQL</name>
+    <description>A lightweight and powerful API to convert search expressions to SQL.</description>
 
     <dependencies>
         <dependency>

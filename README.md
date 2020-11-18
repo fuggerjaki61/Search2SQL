@@ -14,9 +14,7 @@ Search2SQL is a Java library that can be used to convert search expressions to a
 
  > If you don't want to *waste* ;) time reading the *Full Documentation*, please take 5 minutes and read the *Quick Documentation*.
 
- [Wiki](https://github.com/fuggerjaki61/Search2SQL/wiki)
- [Full Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Full-Documentation)
- [Quick Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Quick-Documentation)
+[Wiki](https://github.com/fuggerjaki61/Search2SQL/wiki) | [Full Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Full-Documentation) | [Quick Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Quick-Documentation)
 
 ### Usage
 Maven:

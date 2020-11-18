@@ -14,9 +14,7 @@ Search2SQL is a Java library that can be used to convert search expressions to a
 
  > If you don't want to *waste* ;) time reading the *Full Documentation*, please take 5 minutes and read the *Quick Documentation*.
 
- [Wiki](https://github.com/fuggerjaki61/Search2SQL/wiki)
- [Full Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Full-Documentation)
- [Quick Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Quick-Documentation)
+[Wiki](https://github.com/fuggerjaki61/Search2SQL/wiki) | [Full Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Full-Documentation) | [Quick Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Quick-Documentation)
 
 ### Usage
 Maven:
@@ -45,7 +43,7 @@ and then translate a search expression
 // this can be used to translate it to sql
 String sql = new FileTranslator().translate(expression, // input from the user
 	config, // previously configured
-	new BasicInterpreter() // instance of an intepreter
+	new BasicInterpreter()); // instance of an intepreter
 ```
 
 this will generate something that follows this pattern `tableName.columnName = ? or tableName.columnName like(?)`. The `?` will be replaced by a JDBC `PreparedStatement` with the real values to prevent SQL Injection (utility is going to be added).

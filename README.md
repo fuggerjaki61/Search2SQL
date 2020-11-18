@@ -1,29 +1,55 @@
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fuggerjaki61/search2sql) [![Build Status](https://travis-ci.org/fuggerjaki61/search2sql.svg?branch=master)](https://travis-ci.org/fuggerjaki61/search2sql) 
+
 # Search2SQL
 
-Search2SQL can be used to convert a search expression to a usable SQL query. This free, open-source library is intended to be very flexible and so it can be used for a lot more.
+Search2SQL is a Java library that can be used to convert search expressions to a valid parts of a SQL query. Search2SQL aims to be highly configurable for every usage scenario but also to be easy to understand and use. 
 
- > #### Note
- > This is currently just a demo and just provides some basic implementations. This library is currently not meant to be used and since it isn't finished yet.
- > I've planned to add a lot more different implementations.
+### Goals
+ - Simple API Design
+ - Easy to configure and use
+ - Lightweight 
 
----
+### Documentation
 
-#### Libray Scheme
-The library has three phases it walks through. Each phase can be used seperately. If you are using a NoSQL database, you can stop between after the second and then continue differently.
+ > If you don't want to *waste* ;) time reading the *Full Documentation*, please take 5 minutes and read the *Quick Documentation*.
 
-![Scheme Picture](lib-scheme.png "Library Scheme")
+ [Wiki](https://github.com/fuggerjaki61/Search2SQL/wiki)
+ [Full Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Full-Documentation)
+ [Quick Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Quick-Documentation)
 
-##### 1. Parsing
-This phase is really close to the second step `Ìnterpreting`. The `Interpreter` searches every class that defines the `@SearchParser` annotation. After that the whole search expression will be split in sub-queries. These queries will be parsed as `SubQuery`'s.
+### Usage
+Maven:
+```xml
+<dependency>
+  <groupId>com.search2sql</groupId>
+  <artifactId>search2sql</artifactId>
+  <version>1.0-echo-rc1</version>
+</dependency>
+```
 
-##### 2. Interpreting
-As already mentioned this is nearly the same step as `Parsing`. In this phase the search expression will be interpreted and parsed by the `Parser`'s. 
+### Examples
 
-##### 3. Translating
-In this last phase the parsed&interpreted list of `SubQuery`'s will be translated to SQL. 
+A simple usage would be to configure a table
 
----
+```java
+TableConfig config = new TableConfig("tableName", // your sql table name
+	new Column("id", "int"), // column named 'id' with an integer value
+	new Column("name", "text"), // column named 'text' with any text value
+	new Column("date", "date")); // column named 'date' with a date value
+```
 
-The library was designed that there are specialized implementations of `Parser`, `Interpreter` and `Translator`. e.g.: `DateParser` (designed to parse dates), `LogicInterpreter` (can interpret `and`, `or`, etc.) or `PostgresTranslator` (translates valid PostgresSQL). The [Decorator Pattern](https://en.wikipedia.org/wiki/Decorator_pattern) will be also part of the next versions.
+and then translate a search expression
 
-This is just a quick guide to show how powerful the idea behind Search2SQL really is. As already said this is a really basic demo, a better documentation and more implementations are coming.
+```java
+// this can be used to translate it to sql
+String sql = new FileTranslator().translate(expression, // input from the user
+	config, // previously configured
+	new BasicInterpreter() // instance of an intepreter
+```
+
+this will generate something that follows this pattern `tableName.columnName = ? or tableName.columnName like(?)`. The `?` will be replaced by a JDBC `PreparedStatement` with the real values to prevent SQL Injection (utility is going to be added).
+
+### License
+
+Search2SQL is released under the [MIT License](LICENSE).

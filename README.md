@@ -31,7 +31,8 @@ Maven:
 A simple usage would be to configure a table
 
 ```java
-TableConfig config = new TableConfig("tableName", // your sql table name
+// 
+final TableConfig config = new TableConfig("tableName", // your sql table name
 	new Column("id", "int"), // column named 'id' with an integer value
 	new Column("name", "text"), // column named 'text' with any text value
 	new Column("date", "date")); // column named 'date' with a date value

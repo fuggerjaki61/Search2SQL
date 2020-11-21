@@ -31,7 +31,7 @@ Maven:
 A simple usage would be to configure a table
 
 ```java
-// 
+// config is unchangeable
 final TableConfig config = new TableConfig("tableName", // your sql table name
 	new Column("id", "int"), // column named 'id' with an integer value
 	new Column("name", "text"), // column named 'text' with any text value

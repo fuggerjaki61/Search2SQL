@@ -3,7 +3,11 @@ package com.search2sql.impl.interpreter.util;
 import com.search2sql.exception.IllegalUseException;
 import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;
-import org.reflections8.Reflections;
+import org.reflections.Reflections;
+import org.reflections.scanners.FieldAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -34,13 +38,7 @@ import java.util.regex.Pattern;
  */
 public class ParserLoader {
 
-    private static final Set<Class<?>> parsers;
-
-    static {
-        Reflections reflections = new Reflections();
-
-        parsers = reflections.getTypesAnnotatedWith(SearchParser.class);
-    }
+    private static Set<Class<?>> parsers;
 
     /**
      * This is the main method of this class. This method loads and constructs an object of the {@link Parser} based
@@ -50,6 +48,15 @@ public class ParserLoader {
      * @return a new instance of the specific Parser class based on the id
      */
     public static Parser getParser(String id) {
+        if (parsers == null) {
+            Reflections reflections = new Reflections("",
+                    new TypeAnnotationsScanner(),
+                    new SubTypesScanner(),
+                    new FieldAnnotationsScanner());
+
+            parsers = reflections.getTypesAnnotatedWith(SearchParser.class);
+        }
+
         // id can't be null
         if (id == null) {
             // misuse of the api

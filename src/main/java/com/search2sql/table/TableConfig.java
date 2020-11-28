@@ -18,7 +18,7 @@ public class TableConfig {
     /**
      * This defines the name of the table used while translating the search.
      */
-    private String name;
+    private final String name;
 
     /**
      * This list saves the config of each column. This is the most important data in this class.
@@ -26,13 +26,14 @@ public class TableConfig {
      * <b>See Also</b><br>
      * {@link Column com.searchflow.table.Column}
      */
-    private ArrayList<Column> columns;
+    private final ArrayList<Column> columns;
 
     /**
      * This is a basic constructor that does nothing.
      */
     public TableConfig() {
-        // NOOP
+        name = null;
+        columns = new ArrayList<>();
     }
 
     /**
@@ -50,6 +51,7 @@ public class TableConfig {
      * @param columns the columns
      */
     public TableConfig(ArrayList<Column> columns) {
+        name = null;
         this.columns = columns;
     }
 
@@ -84,29 +86,11 @@ public class TableConfig {
     }
 
     /**
-     * Sets name.
-     *
-     * @param name the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Gets columns.
      *
      * @return the columns
      */
     public ArrayList<Column> getColumns() {
         return columns;
-    }
-
-    /**
-     * Sets columns.
-     *
-     * @param columns the columns
-     */
-    public void setColumns(ArrayList<Column> columns) {
-        this.columns = columns;
     }
 }

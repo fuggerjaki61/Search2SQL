@@ -25,18 +25,18 @@ public class Column {
     /**
      * This string contains the name of the column later used while translating the query to sql.
      */
-    private String name;
+    private final String name;
 
     /**
      * This string contains the id of the parser that should be used while parsing.
      */
-    private String parserId;
+    private final String parserId;
 
     /**
      * This boolean indicates whether to use this column as default if a sub-query is not identifiable for another in a
      * table with multiple columns.
      */
-    private boolean primary;
+    private final boolean primary;
 
     /**
      * <b>Important</b><br>
@@ -84,15 +84,6 @@ public class Column {
     }
 
     /**
-     * Sets name.
-     *
-     * @param name the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Gets parser id.
      *
      * @return the parser id
@@ -102,29 +93,11 @@ public class Column {
     }
 
     /**
-     * Sets parser id.
-     *
-     * @param parserId the parser id
-     */
-    public void setParserId(String parserId) {
-        this.parserId = parserId;
-    }
-
-    /**
      * Is primary boolean.
      *
      * @return the boolean
      */
     public boolean isPrimary() {
         return primary;
-    }
-
-    /**
-     * Sets primary.
-     *
-     * @param primary the primary
-     */
-    public void setPrimary(boolean primary) {
-        this.primary = primary;
     }
 }

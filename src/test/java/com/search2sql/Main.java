@@ -31,10 +31,10 @@ public class Main {
         Translator translator = new FileTranslator();
 
         // configure the table
-        TableConfig tableConfig = new TableConfig("table", new Column("text", "text#false"), new Column("int", "int"));
+        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));
 
         // print out help
-        System.out.println("Type a search query, enter 'exit' to exit or set the table config with 'config [[\"name\", \"parserId\"], ...]'.");
+        System.out.println("Type a search query or enter 'exit' to exit.");
 
         // runs forever
         while (true) {
@@ -51,24 +51,6 @@ public class Main {
 
                 // exits JVM and loop is stopped
                 System.exit(0);
-            } else if (input.matches("^config\\s+\\[.*]$")) {
-                tableConfig.setColumns(new ArrayList<>());
-
-                input = input.substring(6).trim();
-                input = input.substring(1, input.length() - 1);
-
-                Matcher m = Pattern.compile("\\[[^,]+,\\s*[^\\]]+]")
-                        .matcher(input);
-
-                while (m.find()) {
-                    String match = m.group();
-
-                    Matcher matcher = Pattern.compile("\\[(?<name>[^,]+),\\s*(?<parser>[^]]+)]").matcher(match);
-
-                    if (matcher.find()) {
-                        tableConfig.getColumns().add(new Column(matcher.group("name"), matcher.group("parser")));
-                    }
-                }
             } else {
                 // gets current time in millis
                 long time = System.currentTimeMillis();

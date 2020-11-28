@@ -22,7 +22,7 @@ Maven:
 <dependency>
   <groupId>com.search2sql</groupId>
   <artifactId>search2sql</artifactId>
-  <version>1.0-echo-rc1</version>
+  <version>1.0-echo-rc2</version>
 </dependency>
 ```
 

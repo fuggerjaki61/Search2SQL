@@ -22,7 +22,7 @@ Maven:
 <dependency>
   <groupId>com.search2sql</groupId>
   <artifactId>search2sql</artifactId>
-  <version>1.0-echo-rc1</version>
+  <version>1.0-echo-rc2</version>
 </dependency>
 ```
 
@@ -31,7 +31,8 @@ Maven:
 A simple usage would be to configure a table
 
 ```java
-TableConfig config = new TableConfig("tableName", // your sql table name
+// config is unchangeable
+final TableConfig config = new TableConfig("tableName", // your sql table name
 	new Column("id", "int"), // column named 'id' with an integer value
 	new Column("name", "text"), // column named 'text' with any text value
 	new Column("date", "date")); // column named 'date' with a date value

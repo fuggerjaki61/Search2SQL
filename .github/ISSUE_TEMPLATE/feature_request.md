@@ -12,7 +12,7 @@ assignees: ''
 <!--- General Information: --->
 <!--- You can also use the Question and Report Bug template. --->
 <!--- You can vary this structure. This is just a template to help you get an idea. --->
-<!--- A good description helps to understand the feature better.
+<!--- A good description helps to understand the feature better. --->
 <!--- Try to make it readable and think of correct indentation/formatting. --->
 
 <!--- Provide a summary of your idea (this is the minimum) -->

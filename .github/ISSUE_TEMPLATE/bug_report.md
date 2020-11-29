@@ -17,16 +17,16 @@ assignees: ''
 
 <!--- code with the problem --->
 
-## Expected Behavior
+### Expected Behavior
 <!--- Tell what you think should happen or what you want to happen -->
 
-## Current Behavior
+### Current Behavior
 <!--- Tell what happens instead of the expected behavior -->
 
-## Steps to Reproduce
+### Steps to Reproduce
 <!--- if the steps are important to reproduce the problem --->
 
-## Context (Environment)
+### Context (Environment)
 <!--- Which java version are you using? Is it a jre or jdk? Production or Development? OpenJDK or OracleJDK? ... -->
 
 <!--- extra information if needed -->

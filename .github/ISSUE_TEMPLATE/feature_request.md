@@ -2,19 +2,24 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-labels: ''
+labels: 'Status: Available, Type: Enhancement'
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+<!--- Provide a general summary of the enhancement in the Title above -->
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+<!--- General Information: --->
+<!--- You can also use the Question and Report Bug template. --->
+<!--- You can vary this structure. This is just a template to help you get an idea. --->
+<!--- A good description helps to understand the feature better.
+<!--- Try to make it readable and think of correct indentation/formatting. --->
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+<!--- Provide a summary of your idea (this is the minimum) -->
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+<!--- extra information if needed -->
+### Goal
+<!--- summarize the goals --->
+
+### Implementation
+<!--- how would you implement it? (no code needed, e.g. which pattern?) --->

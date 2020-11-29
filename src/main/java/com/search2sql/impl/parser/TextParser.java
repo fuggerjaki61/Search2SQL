@@ -65,11 +65,15 @@ public class TextParser extends QuotedParser {
             query.setParserId("text");
             query.setType("quote");
 
+            // add a percent character for usage in sql 'LIKE()'
+            query.setValue("%" + query.getValue() + "%");
+
             // return the query
             return query;
         }
 
-        // just wraps parameter
-        return new SubQuery("text", "simple", subQuery);
+        // wrap the query
+        // add a percent character for usage in sql 'LIKE()'
+        return new SubQuery("text", "simple", "%" + subQuery + "%");
     }
 }

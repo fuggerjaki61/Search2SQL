@@ -47,13 +47,13 @@ public class FileTranslator extends Translator {
      * @param customProperties path to the .properties file relative to the resources
      */
     public FileTranslator(String customProperties) {
-        // load base properties
-        props = SqlPropertiesLoader.getProperties("sql.properties");
+        // initialize properties
+        props = new Properties();
 
-        /*
-        add all custom properties defined in the user's properties file
-        if a value already exists it will be overwritten
-         */
+        // put the default library values
+        props.putAll(SqlPropertiesLoader.getProperties("sql.properties"));
+
+        // add (override if they already exist) the values with custom user ones
         props.putAll(SqlPropertiesLoader.getProperties(customProperties));
     }
 
@@ -68,6 +68,18 @@ public class FileTranslator extends Translator {
      */
     @Override
     public String translate(Query query) {
+        // gets table name as column prefix
+        String columnPrefix = query.getTableConfig().getName();
+
+        // checks if a table name was specified
+        if (columnPrefix == null) {
+            // just set an empty string to prevent a NullPointerException
+            columnPrefix = "";
+        } else {
+            // add a point after the table name for valid sql syntax
+            columnPrefix += ".";
+        }
+
         // initializes a new StringBuilder to save the sql
         StringBuilder sql = new StringBuilder();
 
@@ -78,8 +90,8 @@ public class FileTranslator extends Translator {
 
             // checks if property exists
             if (property != null) {
-                // adds property value with $ replaced with the current column
-                sql.append(property.trim().replaceAll("\\$", subQuery.getColumnName()));
+                // adds property value with $ replaced with the current column and adds table name as prefix
+                sql.append(property.trim().replaceAll("\\$", columnPrefix + subQuery.getColumnName()));
 
                 // appends a whitespace
                 sql.append(" ");

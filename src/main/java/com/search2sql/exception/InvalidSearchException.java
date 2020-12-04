@@ -15,17 +15,14 @@ package com.search2sql.exception;
  */
 public class InvalidSearchException extends Exception {
 
-    private final long errorCode;
-
-    // TODO i18n
-    private final String exception = null;
+    private final int errorCode;
 
     /**
      * This is a basic constructor initializing values.
      *
      * @param errorCode unique error code
      */
-    public InvalidSearchException(long errorCode) {
+    public InvalidSearchException(int errorCode) {
         this.errorCode = errorCode;
     }
 
@@ -34,17 +31,19 @@ public class InvalidSearchException extends Exception {
      *
      * @return long containing the error code
      */
-    public long getErrorCode() {
+    public int getErrorCode() {
         return errorCode;
     }
 
     /**
-     * <b>NOT WORKING</b><br>
-     * The i18n string isn't supported yet.
+     * This method returns the error code in form of a hexadecimal string.
+     * <br><br>
+     * This value is shorter and thus more user friendly (only show it when it is needed; rather show the error description)
      *
-     * @return null
+     * @return hex string representing error code
      */
-    public String getException() {
-        return null;
+    public String getErrorHash() {
+        // convert it to hexadecimal
+        return Integer.toHexString(errorCode);
     }
 }

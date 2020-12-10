@@ -2,15 +2,11 @@ package com.search2sql.exception.i18n;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-public class DefaultExceptionHandlerTest {
+public class LocalizedExceptionHandlerTest {
 
     @Test
     void handle() {
-        ExceptionHandler handler = new DefaultExceptionHandler();
+        ExceptionHandler handler = new LocalizedExceptionHandler();
 
         String i18n = handler.handle(0);
 

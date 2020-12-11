@@ -11,7 +11,7 @@ import com.search2sql.exception.InvalidSearchException;
  * <ul>
  *     <li>int</li>
  *     <li>hex (<code>String</code>)</li>
- *     <li><code>InvalidSearchException</code>></li>
+ *     <li><code>InvalidSearchException</code></li>
  * </ul>
  * The handler will return the localized string for the specific error code. The localization is the task of each implementation
  * and thus is handled differently by each implementation.

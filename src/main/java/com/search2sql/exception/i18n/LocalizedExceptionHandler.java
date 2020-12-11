@@ -35,6 +35,9 @@ import java.util.*;
  *         used in the order they were added.
  *     </li>
  * </ul>
+ *
+ * @since 1.1-bravo
+ * @author fuggerjaki61
  */
 public class LocalizedExceptionHandler extends ExceptionHandler {
 

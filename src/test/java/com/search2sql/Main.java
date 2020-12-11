@@ -1,17 +1,15 @@
 package com.search2sql;
 
 import com.search2sql.exception.InvalidSearchException;
+import com.search2sql.exception.i18n.LocalizedExceptionHandler;
+import com.search2sql.exception.i18n.ExceptionHandler;
 import com.search2sql.impl.interpreter.BasicInterpreter;
-import com.search2sql.impl.translator.BasicTranslator;
 import com.search2sql.impl.translator.FileTranslator;
-import com.search2sql.query.SubQuery;
 import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
 import com.search2sql.translator.Translator;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This is a basic test class that contains a main method that can be run to type in a query that will be translated to
@@ -56,20 +54,28 @@ public class Main {
                 // gets current time in millis
                 long time = System.currentTimeMillis();
 
-                // interprets&translates input
-                String sql = null;
-
                 try {
-                    sql = translator.translate(new BasicInterpreter().interpret(input, tableConfig));
+                    // translate it to sql
+                    String sql = translator.translate(new BasicInterpreter().interpret(input, tableConfig));
+
+                    // gets time used for generating query
+                    time = System.currentTimeMillis() - time;
+
+                    // outputs input, time taken and the generated sql query
+                    System.out.format("\tInput: %s\n\tTime: %dms\n\tSQL: %s", input, time, sql);
                 } catch (InvalidSearchException e) {
-                    e.printStackTrace();
+                    // get an exception handler
+                    ExceptionHandler handler = new LocalizedExceptionHandler();
+
+                    // gets the message for the exception
+                    String msg = handler.handle(e);
+
+                    // gets time used for generating query
+                    time = System.currentTimeMillis() - time;
+
+                    // output the input, time taken and the error message
+                    System.out.format("\tInput: %s\n\tTime: %dms\n\tError: %s", input, time, msg);
                 }
-
-                // gets time used for generating query
-                time = System.currentTimeMillis() - time;
-
-                // outputs input, time taken and the generated sql query
-                System.out.format("\tInput: %s\n\tTime: %dms\n\tSQL: %s", input, time, sql);
             }
 
             // prints new line

@@ -62,6 +62,9 @@ public class BasicInterpreter extends Interpreter {
 
         // iterate over every split query
         for (String query : splitQuery(searchQuery, parsers, tableConfig)) {
+            // a flag indicating if this query was parsed
+            boolean parsed = false;
+
             // iterate over every column
             for (Column column : tableConfig.getColumns()) {
                 // get the responding parser for the column
@@ -69,6 +72,9 @@ public class BasicInterpreter extends Interpreter {
 
                 // check if the parser can parse the query
                 if (parser.isParserFor(query)) {
+                    // set the flag to true
+                    parsed = true;
+
                     // it can, so parse it
                     SubQuery subQuery = parser.parse(query);
 
@@ -82,6 +88,15 @@ public class BasicInterpreter extends Interpreter {
                     result.addSubQuery(new SubQuery(null, "logic.connector.or", null));
                 }
             }
+
+            // check if this sub query was parsed
+            if (!parsed) {
+                /*
+                 * No column was specified that could parse this sub query.
+                 * This search expression is invalid and that is shown to the user with the error code 1.
+                 */
+                throw new InvalidSearchException(1);
+            }
         }
 
         // checks if there is a result
@@ -94,7 +109,7 @@ public class BasicInterpreter extends Interpreter {
         return result;
     }
 
-    private LinkedList<String> splitQuery(String searchQuery, Map<String, Parser> parsers, TableConfig config) {
+    private LinkedList<String> splitQuery(String searchQuery, Map<String, Parser> parsers, TableConfig config) throws InvalidSearchException {
         // initialize result list
         LinkedList<String> list = new LinkedList<>();
 
@@ -164,6 +179,15 @@ public class BasicInterpreter extends Interpreter {
                 // clears query
                 query = new StringBuilder();
             }
+        }
+
+        // checks if a quote hasn't been terminated
+        if (quote) {
+            /*
+             * One or more quote(s) haven't been terminated.
+             * This is invalid and shown to the user with the error code 2.
+             */
+            throw new InvalidSearchException(2);
         }
 
         /*

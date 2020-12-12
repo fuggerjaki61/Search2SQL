@@ -79,28 +79,4 @@ public abstract class Translator {
         // third: pass the result back
         return translate(interpreter.interpret(expression, tableConfig));
     }
-
-    /**
-     * This method is just an extension of the {@link Translator#translate(Query)} and
-     * {@link Translator#translate(String, TableConfig, Interpreter)} method. There is no need to override
-     * this method since it is already implemented. This method is only used to make a shortcut so the <code>Translator</code>
-     * can be used easily.<br>
-     * This method just calls the {@link Interpreter#interpret(String, TableConfig)} method to generate the {@link Query}
-     * and then forward it to the actual <code>translate()</code> method. Then the result is getting forwarded back to you.<br>
-     * The <code>Interpreter</code> that will be received as a parameter will be used to interpret the expression.
-     * <br><br>
-     * For more information see the documentation of the {@link Translator#translate(Query)} method and of the {@link Interpreter}.
-     *
-     * @param expression search expression that was entered by the user
-     * @param column configuration of a single column
-     * @param interpreter interpreter used to interpret the expression
-     * @return string containing usable sql (different for every implementation)
-     * @throws InvalidSearchException thrown if a problem occurred while parsing
-     */
-    public String translate(String expression, Column column, Interpreter interpreter) throws InvalidSearchException {
-        // first: interpret the expression with the given interpreter
-        // second: translate it with the actual translation method
-        // third: pass the result back
-        return translate(interpreter.interpret(expression, column));
-    }
 }

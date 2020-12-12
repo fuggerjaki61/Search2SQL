@@ -13,7 +13,7 @@ import com.search2sql.table.TableConfig;
  * <br><br>
  * The <code>Interpreter</code>'s purpose is to interpret the simple string form in the more complex version of
  * a {@link Query} and its {@link com.search2sql.query.SubQuery SubQueries} with the help of
- * {@link Parser Parsers}. The interpret just has one method {@link Interpreter#interpret(String, TableConfig)}.
+ * {@link Parser Parsers}. The interpreter just has one method {@link Interpreter#interpret(String, TableConfig)}.
  * An implementation of this method could look like this:
  * <ol>
  *  <li>
@@ -73,20 +73,4 @@ public abstract class Interpreter {
      * @throws InvalidSearchException thrown if a problem occurred while parsing
      */
     public abstract Query interpret(String searchQuery, TableConfig tableConfig) throws InvalidSearchException;
-
-    /**
-     * This method just provides a shortcut for the usage of a single column interpretation.
-     * This method should be used when performing searches on a single column.
-     * <br><br>
-     * <b>Note</b><br>
-     * This method does <i>NOT</i> perform any implementation specific logic and thus mustn't be overridden.
-     *
-     * @param searchQuery simple string from of the search query
-     * @param column meta-information about the column type
-     * @return parsed and interpreted form of the search query
-     * @throws InvalidSearchException thrown if a problem occurred while parsing
-     */
-    public Query interpret(String searchQuery, Column column) throws InvalidSearchException {
-        return interpret(searchQuery, new TableConfig(column));
-    }
 }

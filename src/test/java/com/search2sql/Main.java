@@ -30,7 +30,7 @@ public class Main {
         Translator translator = new FileTranslator("some.properties");
 
         // configure the table
-        TableConfig tableConfig = new TableConfig("table", new Column("text", "text"), new Column("int", "int"));
+        TableConfig tableConfig = new TableConfig("table", new Column("text", ParserTypes.TEXT), new Column("int", ParserTypes.INT));
 
         // print out help
         System.out.println("Type a search query or enter 'exit' to exit.");

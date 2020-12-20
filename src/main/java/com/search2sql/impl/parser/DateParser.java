@@ -19,7 +19,7 @@ import java.util.Locale;
  * <br><br>
  * This implementation parses every date with the german format <code>dd.mm.yyyy</code>.
  */
-@SearchParser("date")
+@SearchParser("default.date")
 public class DateParser extends Parser {
 
     /**

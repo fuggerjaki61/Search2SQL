@@ -14,7 +14,7 @@ class SearchTest {
     @Test
     void test() throws SQLException, InvalidSearchException {
         Search search = new SearchBuilder()
-                .setTableConfig(new TableConfig(new Column("text", "text")))
+                .setTableConfig(new TableConfig(new Column("text", ParserTypes.TEXT)))
                 .build();
 
         PreparedStatement ps = search.prepareStatement("abc test", new TestConnection(), "", "", 1);

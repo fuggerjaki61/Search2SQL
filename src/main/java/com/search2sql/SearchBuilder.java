@@ -6,10 +6,17 @@ import com.search2sql.exception.i18n.LocalizedExceptionHandler;
 import com.search2sql.impl.interpreter.BasicInterpreter;
 import com.search2sql.impl.translator.FileTranslator;
 import com.search2sql.interpreter.Interpreter;
+import com.search2sql.table.Column;
 import com.search2sql.table.TableConfig;
 import com.search2sql.translator.Translator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class SearchBuilder {
+
+    private String tableName;
+    private ArrayList<Column> columns;
 
     private TableConfig tableConfig;
     private Interpreter interpreter;
@@ -20,6 +27,21 @@ public final class SearchBuilder {
         interpreter = new BasicInterpreter();
         translator = new FileTranslator();
         exceptionHandler = new LocalizedExceptionHandler();
+    }
+
+    public SearchBuilder setTableName(String tableName) {
+        this.tableName = tableName;
+        return this;
+    }
+
+    public SearchBuilder addColumn(Column column) {
+        if (columns == null) {
+            columns = new ArrayList<>();
+        }
+
+        columns.add(column);
+
+        return this;
     }
 
     public SearchBuilder setTableConfig(TableConfig tableConfig) {
@@ -43,8 +65,13 @@ public final class SearchBuilder {
     }
 
     public Search build() {
+        if (tableName != null && columns != null) {
+            tableConfig = new TableConfig(tableName, columns);
+        }
+
         if (tableConfig == null) {
-            throw new IllegalUseException("You must specify a TableConfig with the 'setTableConfig(TableConfig)' method.",
+            throw new IllegalUseException("You must specify a TableConfig with the 'setTableConfig(TableConfig)' method or" +
+                    "use 'setTableName(String)' and 'addColumn(Column)'.",
                     new NullPointerException());
         }
 

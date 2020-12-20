@@ -7,7 +7,7 @@ import com.search2sql.parser.SearchParser;
 /**
  * This implementation of {@link Parser} is for parsing integers.
  */
-@SearchParser("int")
+@SearchParser("default.int")
 public class IntParser extends Parser {
 
     /**

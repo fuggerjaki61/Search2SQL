@@ -14,7 +14,7 @@ import com.search2sql.parser.SearchParser;
  * @author fuggerjaki61
  * @since 0.0.1
  */
-@SearchParser("text")
+@SearchParser("default.text")
 public class TextParser extends QuotedParser {
 
     private boolean quoted = true;

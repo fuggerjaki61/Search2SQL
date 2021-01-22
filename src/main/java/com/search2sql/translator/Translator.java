@@ -32,7 +32,6 @@ import com.search2sql.table.TableConfig;
  * <br><br>
  * <b>Known Implementations</b><br>
  * {@link com.search2sql.impl.translator.FileTranslator com.searchflow.impl.translator.FileTranslator}<br>
- * {@link com.search2sql.impl.translator.BasicTranslator com.searchflow.impl.translator.BasicTranslator}
  *
  * @author fuggerjaki61
  * @since 0.0.1

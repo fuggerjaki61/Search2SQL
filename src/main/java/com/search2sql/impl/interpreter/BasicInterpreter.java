@@ -8,6 +8,7 @@ import com.search2sql.parser.Parser;
 import com.search2sql.query.Query;
 import com.search2sql.query.SubQuery;
 import com.search2sql.table.Column;
+import com.search2sql.table.Table;
 import com.search2sql.table.TableConfig;
 
 import java.util.HashMap;
@@ -51,12 +52,15 @@ public class BasicInterpreter extends Interpreter {
         // this map saves all parsers with its id so it has only to loaded once
         Map<String, Parser> parsers = new HashMap<>();
 
-        // iterate over all parsers
-        for (Column column : tableConfig.getColumns()) {
-            // check if parser already exists
-            if (!parsers.containsKey(column.getParserId())) {
-                // if not, load and add it
-                parsers.put(column.getParserId(), ParserLoader.getParser(column.getParserId()));
+        // iterate over all tables
+        for (Table table : tableConfig.getTables()) {
+            // iterate over all parsers
+            for (Column column : table.getColumns()) {
+                // check if parser already exists
+                if (!parsers.containsKey(column.getParserId())) {
+                    // if not, load and add it
+                    parsers.put(column.getParserId(), ParserLoader.getParser(column.getParserId()));
+                }
             }
         }
 
@@ -66,26 +70,29 @@ public class BasicInterpreter extends Interpreter {
             boolean parsed = false;
 
             // iterate over every column
-            for (Column column : tableConfig.getColumns()) {
-                // get the responding parser for the column
-                Parser parser = parsers.get(column.getParserId());
+            for (Table table : tableConfig.getTables()) {
+                // iterate over every column
+                for (Column column : table.getColumns()) {
+                    // get the responding parser for the column
+                    Parser parser = parsers.get(column.getParserId());
 
-                // check if the parser can parse the query
-                if (parser.isParserFor(query)) {
-                    // set the flag to true
-                    parsed = true;
+                    // check if the parser can parse the query
+                    if (parser.isParserFor(query)) {
+                        // set the flag to true
+                        parsed = true;
 
-                    // it can, so parse it
-                    SubQuery subQuery = parser.parse(query);
+                        // it can, so parse it
+                        SubQuery subQuery = parser.parse(query);
 
-                    // add metadata for translation
-                    subQuery.setColumnName(column.getName());
+                        // add metadata for translation
+                        subQuery.setColumnName(column.getName());
 
-                    // add the query to the list
-                    result.addSubQuery(subQuery);
+                        // add the query to the list
+                        result.addSubQuery(subQuery);
 
-                    // adds a logical 'OR' everytime a new sub-query was added
-                    result.addSubQuery(new SubQuery(null, "logic.connector.or", null));
+                        // adds a logical 'OR' everytime a new sub-query was added
+                        result.addSubQuery(new SubQuery(null, "logic.connector.or", null));
+                    }
                 }
             }
 
@@ -116,17 +123,20 @@ public class BasicInterpreter extends Interpreter {
         // initialize hashset with all characters that are allowed as quotation delimiters
         HashSet<Character> quotationChars = new HashSet<>();
 
-        // iterate over every column in config
-        for (Column column : config.getColumns()) {
-            // get parser for column
-            Parser parser = parsers.get(column.getParserId());
+        // iterate over every table in config
+        for (Table table : config.getTables()) {
+            // iterate over every column in config
+            for (Column column : table.getColumns()) {
+                // get parser for column
+                Parser parser = parsers.get(column.getParserId());
 
-            // check if parser is subclass of QuotedParser
-            if (QuotedParser.class.isAssignableFrom(parser.getClass())) {
-                QuotedParser quotedParser = (QuotedParser) parser;
+                // check if parser is subclass of QuotedParser
+                if (QuotedParser.class.isAssignableFrom(parser.getClass())) {
+                    QuotedParser quotedParser = (QuotedParser) parser;
 
-                // get&add delimiter to set
-                quotationChars.add(quotedParser.getQuotationChar());
+                    // get&add delimiter to set
+                    quotationChars.add(quotedParser.getQuotationChar());
+                }
             }
         }
 

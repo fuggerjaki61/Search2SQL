@@ -6,6 +6,7 @@ import com.search2sql.exception.i18n.ExceptionHandler;
 import com.search2sql.impl.interpreter.BasicInterpreter;
 import com.search2sql.impl.translator.FileTranslator;
 import com.search2sql.table.Column;
+import com.search2sql.table.Table;
 import com.search2sql.table.TableConfig;
 import com.search2sql.translator.Translator;
 
@@ -30,7 +31,7 @@ public class Main {
         Translator translator = new FileTranslator("some.properties");
 
         // configure the table
-        TableConfig tableConfig = new TableConfig("table", new Column("text", ParserTypes.TEXT), new Column("int", ParserTypes.INT));
+        TableConfig tableConfig = new TableConfig(new Table("table", new Column("column", ParserTypes.TEXT)));
 
         // print out help
         System.out.println("Type a search query or enter 'exit' to exit.");

@@ -4,6 +4,8 @@ import com.search2sql.exception.IllegalUseException;
 import com.search2sql.impl.translator.util.SqlPropertiesLoader;
 import com.search2sql.query.Query;
 import com.search2sql.query.SubQuery;
+import com.search2sql.table.Column;
+import com.search2sql.table.Table;
 import com.search2sql.translator.Translator;
 
 import java.util.Properties;
@@ -68,18 +70,6 @@ public class FileTranslator extends Translator {
      */
     @Override
     public String translate(Query query) {
-        // gets table name as column prefix
-        String columnPrefix = query.getTableConfig().getName();
-
-        // checks if a table name was specified
-        if (columnPrefix == null) {
-            // just set an empty string to prevent a NullPointerException
-            columnPrefix = "";
-        } else {
-            // add a point after the table name for valid sql syntax
-            columnPrefix += ".";
-        }
-
         // initializes a new StringBuilder to save the sql
         StringBuilder sql = new StringBuilder();
 
@@ -90,6 +80,32 @@ public class FileTranslator extends Translator {
 
             // checks if property exists
             if (property != null) {
+                // default is no table prefix
+                String columnPrefix = null;
+
+                // iterate over every table
+                for (Table table : query.getTableConfig().getTables()) {
+                    // iterate over every column in table
+                    for (Column column : table.getColumns()) {
+                        // check if column name is sub-query's column name
+                        if (column.getName().equalsIgnoreCase(subQuery.getColumnName())) {
+                            // this is the current column prefix
+                            columnPrefix = table.getPrefix();
+
+                            break;
+                        }
+                    }
+                }
+
+                // checks if a table name was specified
+                if (columnPrefix == null) {
+                    // just set an empty string to prevent a NullPointerException
+                    columnPrefix = "";
+                } else {
+                    // add a point after the table name for valid sql syntax
+                    columnPrefix += ".";
+                }
+
                 // adds property value with $ replaced with the current column and adds table name as prefix
                 sql.append(property.trim().replaceAll("\\$", columnPrefix + subQuery.getColumnName()));
 

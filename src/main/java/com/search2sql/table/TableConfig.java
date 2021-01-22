@@ -1,96 +1,53 @@
 package com.search2sql.table;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * This is the configuration of the specific table that is searchable. This DAO is used to hold the list
- * of {@link Column Columns} used in the table. This specifies the table that is shown to the user and the part or whole
- * server-side table. This is used in the <code>Interpreting</code> phase to check which sub-query is for which column and
- * to check which <code>Parsers</code> can be used. Also this is used in the <code>Translating</code> phase to check how
- * to name the columns and to know how the table looks like.
+ * This is class contains the whole configuration for a table complex.
+ * <br><br>
+ * This class contains a set of {@link Table Tables} which again contain {@link Column Columns}. This class just functions
+ * as a wrapper for the set of tables. As a new feature multiple tables are supported.
+ * <br><br>
+ * <b>Important</b><br>
+ * If you're using multiple tables, each table should a have an unique table prefix to prevent column name duplication.
  *
  * @author fuggerjaki61
- * @since 0.0.1
+ * @since 2.0-zulu
  */
 public class TableConfig {
 
-    /**
-     * This defines the name of the table used while translating the search.
-     */
-    private final String name;
+    private final Set<Table> tables;
 
     /**
-     * This list saves the config of each column. This is the most important data in this class.
-     * <br><br>
-     * <b>See Also</b><br>
-     * {@link Column com.searchflow.table.Column}
+     * This is a basic constructor for enhanced usage. No logic is performed.
+     *
+     * @param tables set of tables
      */
-    private final ArrayList<Column> columns;
-
-    /**
-     * This is a basic constructor that does nothing.
-     */
-    public TableConfig() {
-        name = null;
-        columns = new ArrayList<>();
+    public TableConfig(Table... tables) {
+        // call the constructor with a new set
+        this(new HashSet<>(Arrays.asList(tables)));
     }
 
     /**
-     * This is a basic constructor that does nothing beside initializing values.
+     * This is a basic constructor just setting the value. No logic is performed.
      *
-     * @param columns the columns
+     * @param tables set of tables
      */
-    public TableConfig(Column... columns) {
-        this(new ArrayList<>(Arrays.asList(columns)));
+    public TableConfig(Set<Table> tables) {
+        // create a new unmodifiable set
+        this.tables = Collections.unmodifiableSet(tables);
     }
 
     /**
-     * This is a basic constructor that does nothing beside initializing values.
+     * This method returns an unmodifiable set with all tables that were set when the constructor was called. No changes
+     * can be made.
      *
-     * @param columns the columns
+     * @return unmodifiable set of all tables
      */
-    public TableConfig(ArrayList<Column> columns) {
-        name = null;
-        this.columns = columns;
-    }
-
-    /**
-     * This is a basic constructor that does nothing beside initializing values.
-     *
-     * @param name    the name
-     * @param columns the columns
-     */
-    public TableConfig(String name, Column... columns) {
-        this(name, new ArrayList<>(Arrays.asList(columns)));
-    }
-
-    /**
-     * This is a basic constructor that does nothing beside initializing values.
-     *
-     * @param name    the name
-     * @param columns the columns
-     */
-    public TableConfig(String name, ArrayList<Column> columns) {
-        this.name = name;
-        this.columns = columns;
-    }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets columns.
-     *
-     * @return the columns
-     */
-    public ArrayList<Column> getColumns() {
-        return columns;
+    public Set<Table> getTables() {
+        return tables;
     }
 }

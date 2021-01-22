@@ -1,103 +1,74 @@
 package com.search2sql.table;
 
 /**
- * This DAO contains basic information about the column used in the {@link TableConfig}. This is essential for the
- * <code>Interpreting</code> and <code>Translating</code> phase.<br>
- * This class basically contains three values:
- * <ul>
- *     <li>
- *         <code>name</code> - name of the column used in sql translation
- *     </li>
- *     <li>
- *         <code>parserId</code> - id of the parser that should be used when parsing the sub-query
- *     </li>
- *     <li>
- *         <code><span style="font-size: x-small;">boolean</span> primary</code> - indicates if this column should be used
- *         as default if sub-query is not identifiable in a multi-column table config
- *     </li>
- * </ul>
+ * This class represents the value of a SQL column. This is the smallest structural unit and a set of these columns is
+ * collected in a {@link Table}.
+ * <br><br>
+ * The column has a name that should be unique, unless you want a column to have multiple types like string and int. Each
+ * column has the id of the parser that will be used for parsing.<br>
+ * As a new feature <i>weight</i> is added. This integer defines how important this column is in the table. This can be used
+ * for marking columns less relevant than others. How this behaves exactly is based on which implementation of the
+ * {@link com.search2sql.interpreter.Interpreter Interpreter} you're using (it can also be ignored).
  *
  * @author fuggerjaki61
- * @since 0.0.1
+ * @since 2.0-zulu
  */
 public class Column {
 
-    /**
-     * This string contains the name of the column later used while translating the query to sql.
-     */
     private final String name;
-
-    /**
-     * This string contains the id of the parser that should be used while parsing.
-     */
     private final String parserId;
+    private final int weight;
 
     /**
-     * This boolean indicates whether to use this column as default if a sub-query is not identifiable for another in a
-     * table with multiple columns.
-     */
-    private final boolean primary;
-
-    /**
-     * <b>Important</b><br>
-     * This constructors purpose is to minimize the parameter list by initializing the <code>primary</code> field with the
-     * value <code>false</code> as default.
+     * This is a basic constructor initializing values. No logic is performed.
      * <br><br>
-     * <b>See Also</b><br>
-     * {@link Column}<br>
-     * {@link Column#Column(String, String, boolean)}<br>
+     * <b>Note</b><br>
+     * This constructor uses the default value <code>0</code> for the column weight.
      *
-     * @param name     the name
-     * @param parserId the parser id
+     * @param name name of the column
+     * @param parserId id of the parser used
      */
     public Column(String name, String parserId) {
-        // passing the parameters on
-        // primary is by default false
-        this(name, parserId, false);
+        this(name, parserId, 0);
     }
 
     /**
-     * This is a basic constructor just setting the fields' values by the parameters' values.
-     * <br><br>
-     * <b>See Also</b><br>
-     * {@link Column}<br>
-     * {@link Column#Column(String, String)}<br>
+     * This is a basic constructor initializing values. No logic is performed.
      *
-     * @param name     the name
-     * @param parserId the parser id
-     * @param primary  the primary
+     * @param name name of the column
+     * @param parserId id of the parser used
+     * @param weight importance of this column
      */
-    public Column(String name, String parserId, boolean primary) {
-        // just sets values
+    public Column(String name, String parserId, int weight) {
         this.name = name;
         this.parserId = parserId;
-        this.primary = primary;
+        this.weight = weight;
     }
 
     /**
-     * Gets name.
+     * Returns the name of the column.
      *
-     * @return the name
+     * @return name of the column
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Gets parser id.
+     * Returns the id of the parser that is used for parsing this column.
      *
-     * @return the parser id
+     * @return id of the parser used
      */
     public String getParserId() {
         return parserId;
     }
 
     /**
-     * Is primary boolean.
+     * Returns the relevance of the column.
      *
-     * @return the boolean
+     * @return importance of the column
      */
-    public boolean isPrimary() {
-        return primary;
+    public int getWeight() {
+        return weight;
     }
 }

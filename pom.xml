@@ -6,7 +6,7 @@
 
     <groupId>com.search2sql</groupId>
     <artifactId>search2sql</artifactId>
-    <version>1.2-bravo</version>
+    <version>1.2-snapshot</version>
     <packaging>jar</packaging>
 
     <name>Search2SQL</name>

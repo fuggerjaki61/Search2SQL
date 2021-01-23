@@ -59,7 +59,7 @@ public class BasicInterpreter extends Interpreter {
                 // check if parser already exists
                 if (!parsers.containsKey(column.getParserId())) {
                     // if not, load and add it
-                    parsers.put(column.getParserId(), ParserLoader.getParser(column.getParserId()));
+                    parsers.put(column.getParserId(), ParserLoader.loadParser(column.getParserId()));
                 }
             }
         }

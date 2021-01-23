@@ -8,6 +8,6 @@ class ParserLoaderTest {
 
     @Test
     void getParser() {
-        ParserLoader.getParser("text#'test test', 11, true");
+        ParserLoader.loadParser("text#'test test', 11, true");
     }
 }

@@ -17,7 +17,7 @@ import com.search2sql.query.SubQuery;
  * @author fuggerjaki61
  * @since 1.0-echo
  */
-public class QuotedParser extends Parser {
+public abstract class QuotedParser extends Parser {
 
     private final char quotationChar;
 
@@ -41,30 +41,6 @@ public class QuotedParser extends Parser {
     public QuotedParser(char quotationChar) {
         // just set it
         this.quotationChar = quotationChar;
-    }
-
-    /**
-     * This method should be used in the <code>isParserFor()</code> method of any subclass.<br>
-     * Example:<br><br>
-     * <code>return anotherCondition || super.isParserFor(subQuery);</code>
-     *
-     * @param subQuery split part of the whole search query
-     * @return boolean if the parser can be used for the sub-query
-     */
-    @Override
-    public boolean isParserFor(String subQuery) {
-        return subQuery.matches("[\\s]*" + quotationChar + ".*" + quotationChar + "[\\s]*");
-    }
-
-    /**
-     * This method should be used in the <code>parse()</code> method of any subclass.<br>
-     *
-     * @param subQuery split part of the whole search query
-     * @return parsed SubQuery
-     */
-    @Override
-    public SubQuery parse(String subQuery) {
-        return new SubQuery("quoted", "simple", subQuery.trim().substring(1, subQuery.length() - 1));
     }
 
     /**

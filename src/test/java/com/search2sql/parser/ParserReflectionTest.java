@@ -1,7 +1,7 @@
 package com.search2sql.parser;
 
 import org.junit.jupiter.api.Test;
-import org.reflections.Reflections;
+import org.reflections8.Reflections;
 
 import java.util.Set;
 

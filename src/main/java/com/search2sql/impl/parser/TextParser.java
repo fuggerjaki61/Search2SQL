@@ -31,7 +31,7 @@ public class TextParser extends QuotedParser {
      *
      * @param quoted boolean indicating whether quotes are regarded or not
      */
-    public TextParser(Boolean quoted) {
+    public TextParser(boolean quoted) {
         this.quoted = quoted;
     }
 
@@ -44,7 +44,7 @@ public class TextParser extends QuotedParser {
     @Override
     public boolean isParserFor(String subQuery) {
         // parse everything or check if QuotedParser can parse it
-        return subQuery.matches("[\\S]+") || super.isParserFor(subQuery);
+        return subQuery.matches("[\\S]+");
     }
 
     /**
@@ -56,22 +56,6 @@ public class TextParser extends QuotedParser {
      */
     @Override
     public SubQuery parse(String subQuery) {
-        // checks if QuotedParser can parse it and if quotes are regarded
-        if (super.isParserFor(subQuery) && quoted) {
-            // parse it
-            SubQuery query = super.parse(subQuery);
-
-            // add metadata
-            query.setParserId("text");
-            query.setType("quote");
-
-            // add a percent character for usage in sql 'LIKE()'
-            query.setValue("%" + query.getValue() + "%");
-
-            // return the query
-            return query;
-        }
-
         // wrap the query
         // add a percent character for usage in sql 'LIKE()'
         return new SubQuery("text", "simple", "%" + subQuery + "%");

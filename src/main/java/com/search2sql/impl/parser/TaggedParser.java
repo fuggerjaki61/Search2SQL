@@ -6,22 +6,22 @@ public abstract class TaggedParser extends Parser {
 
     private final String tag;
 
-    private final boolean canHaveQuote;
+    private final char quotation;
 
     public TaggedParser(String tag) {
-        this(tag, false);
+        this(tag, Character.MIN_VALUE);
     }
 
-    public TaggedParser(String tag, boolean canHaveQuote) {
+    public TaggedParser(String tag, char quotation) {
         this.tag = tag;
-        this.canHaveQuote = canHaveQuote;
+        this.quotation = quotation;
     }
 
     public String getTag() {
         return tag;
     }
 
-    public boolean canHaveQuote() {
-        return canHaveQuote;
+    public char getQuotation() {
+        return quotation;
     }
 }

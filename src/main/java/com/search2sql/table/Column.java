@@ -71,4 +71,13 @@ public class Column {
     public int getWeight() {
         return weight;
     }
+
+    @Override
+    public String toString() {
+        return "Column{" +
+                "name='" + name + '\'' +
+                ", parserId='" + parserId + '\'' +
+                ", weight=" + weight +
+                '}';
+    }
 }

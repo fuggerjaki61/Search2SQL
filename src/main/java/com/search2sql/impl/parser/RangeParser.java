@@ -6,22 +6,26 @@ public abstract class RangeParser extends Parser {
 
     private final String delimiter;
 
-    private final boolean canHaveQuote;
+    private final char quotation;
 
     public RangeParser() {
-        this("[.]{2,3}", false);
+        this("[\\.]{2,3}");
     }
 
-    public RangeParser(String delimiter, boolean canHaveQuote) {
+    public RangeParser(String delimiter) {
+        this(delimiter, Character.MIN_VALUE);
+    }
+
+    public RangeParser(String delimiter, char quotation) {
         this.delimiter = delimiter;
-        this.canHaveQuote = canHaveQuote;
+        this.quotation = quotation;
     }
 
     public String getDelimiter() {
         return delimiter;
     }
 
-    public boolean canHaveQuote() {
-        return canHaveQuote;
+    public char getQuotation() {
+        return quotation;
     }
 }

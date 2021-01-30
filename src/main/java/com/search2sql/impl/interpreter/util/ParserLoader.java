@@ -51,7 +51,7 @@ public class ParserLoader {
                 SearchParser annotation = parser.getAnnotation(SearchParser.class);
 
                 if (!annotation.value().isEmpty()) {
-                    if (!annotation.value().trim().matches("\\s+")) {
+                    if (annotation.value().trim().matches("^\\S+$")) {
                         if (Parser.class.isAssignableFrom(parser)) {
                             if (!temp.containsKey(annotation.value())) {
                                 temp.put(annotation.value(), parser);

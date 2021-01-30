@@ -46,7 +46,7 @@ public class BasicInterpreter extends Interpreter {
     @Override
     public Query interpret(String searchQuery, TableConfig tableConfig) throws InvalidSearchException {
         // instantiate new query
-        Query result = new Query(searchQuery, tableConfig);
+        Query result = new Query(searchQuery, tableConfig, new LinkedList<>());
 
         // initialize new map with id and its loaded parsers
         // this map saves all parsers with its id so it has only to loaded once
@@ -109,7 +109,7 @@ public class BasicInterpreter extends Interpreter {
         // checks if there is a result
         if (!result.getSubQueries().isEmpty()) {
             // there are results, but the last one is always an 'OR'
-            result.getSubQueries().removeLast();
+            result.getSubQueries().remove(result.getSubQueries().size() - 1);
         }
 
         // return interpreted, complete Query
@@ -135,7 +135,7 @@ public class BasicInterpreter extends Interpreter {
                     QuotedParser quotedParser = (QuotedParser) parser;
 
                     // get&add delimiter to set
-                    quotationChars.add(quotedParser.getQuotationChar());
+                    quotationChars.add(quotedParser.getQuotation());
                 }
             }
         }

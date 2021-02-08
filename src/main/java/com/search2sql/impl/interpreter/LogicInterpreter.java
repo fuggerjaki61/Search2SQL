@@ -50,36 +50,68 @@ public class LogicInterpreter extends Interpreter {
 
         LinkedList<SubQuery> subQueries = new LinkedList<>();
 
+        List<String> split = split(search, parsers.keySet());
+
         mainLoop:
-        for (String s : split(search, parsers.keySet())) {
-            SubQuery last;
+        for (String s : split) {
+            SubQuery previous;
 
             if (subQueries.size() == 0) {
-                last = new SubQuery();
+                previous = new SubQuery();
             } else {
-                last = subQueries.getLast();
+                previous = subQueries.getLast();
             }
 
-            if (supportsLogicOperators && subQueries.size() != 0 && !"logic.operator.not".equalsIgnoreCase(last.getType())) {
-                if (!"logic.connector.and".equalsIgnoreCase(last.getType())
-                        && !"logic.connector.or".equalsIgnoreCase(last.getType())) {
-                    if (keywordAnd.equalsIgnoreCase(s)) {
-                        subQueries.add(new SubQuery(null, null, "logic.connector.and", null));
+            if (keywordAnd.equalsIgnoreCase(s)
+                    && !"logic.connector.and".equalsIgnoreCase(previous.getType())
+                    && !"logic.connector.or".equalsIgnoreCase(previous.getType())
+                    && !"logic.operator.not".equalsIgnoreCase(previous.getType())
+                    && subQueries.size() != 0) {
 
-                        continue;
-                    } else if (keywordOr.equalsIgnoreCase(s)) {
-                        subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
-
-                        continue;
-                    }
-                }
-
-                if (keywordNot.equalsIgnoreCase(s)) {
-                    subQueries.add(new SubQuery(null, null, "logic.operator.not", null));
-
-                    continue;
-                }
             }
+
+//            if (keywordAnd.equalsIgnoreCase(s)) {
+//                if (!"logic.connector.and".equalsIgnoreCase(previous.getType())
+//                        && !"logic.connector.or".equalsIgnoreCase(previous.getType())
+//                        && !"logic.operator.not".equalsIgnoreCase(previous.getType())
+//                        && subQueries.size() != 0) {
+//                    subQueries.add(new SubQuery(null, null, "logic.connector.and", null));
+//
+//                    continue;
+//                }
+//            }
+//
+//            if (keywordOr.equalsIgnoreCase(s)) {
+//                if (!"logic.connector.or".equalsIgnoreCase(previous.getType())
+//                        && !"logic.connector.and".equalsIgnoreCase(previous.getType())
+//                        && !"logic.operator.not".equalsIgnoreCase(previous.getType())
+//                        && subQueries.size() != 0) {
+//                    subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
+//
+//                    continue;
+//                }
+//            }
+//
+//            if (keywordNot.equalsIgnoreCase(s)) {
+//                if (!"logic.operator.not".equalsIgnoreCase(previous.getType())
+//                        && subQueries.size() != split.size() - 1) {
+//                    if (!"logic.connector.and".equalsIgnoreCase(previous.getType())
+//                            && !"logic.connector.or".equalsIgnoreCase(previous.getType())) {
+//                        subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
+//                    }
+//
+//                    subQueries.add(new SubQuery(null, null, "logic.operator.not", null));
+//
+//                    continue;
+//                }
+//            }
+//
+//            if (!"logic.connector.and".equalsIgnoreCase(previous.getType())
+//                    && !"logic.connector.or".equalsIgnoreCase(previous.getType())
+//                    && !"logic.operator.not".equalsIgnoreCase(previous.getType())
+//                    && subQueries.size() != 0) {
+//                subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
+//            }
 
             for (Map.Entry<Parser, String[]> parserEntry : parsers.entrySet()) {
                 if (parserEntry.getKey().isParserFor(s)) {

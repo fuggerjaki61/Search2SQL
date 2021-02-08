@@ -4,6 +4,8 @@ import com.search2sql.query.SubQuery;
 import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;
 
+import java.util.Set;
+
 /**
  * This is a default implementation of the {@link Parser}. This parser is for parsing any strings.
  * <br><br>
@@ -17,47 +19,31 @@ import com.search2sql.parser.SearchParser;
 @SearchParser("default.text")
 public class TextParser extends QuotedParser {
 
-    private boolean quoted = true;
-
-    /**
-     * Basic constructor performing no action.
-     */
     public TextParser() {
-        // NOOP
+        this(true);
     }
 
-    /**
-     * Basic constructor initializing values.
-     *
-     * @param quoted boolean indicating whether quotes are regarded or not
-     */
     public TextParser(boolean quoted) {
-        this.quoted = quoted;
+        super(quoted ? '"' : Character.MIN_VALUE);
     }
 
-    /**
-     * This method checks if the sub-query is not empty or if the sub-query is a quote.
-     *
-     * @param subQuery split part of the whole search query
-     * @return boolean indicating if the sub-query is parsable
-     */
-    @Override
+    public TextParser(char quotation) {
+        super(quotation);
+    }
+
     public boolean isParserFor(String subQuery) {
-        // parse everything or check if QuotedParser can parse it
-        return subQuery.matches("[\\S]+");
+        if (getQuotation() != Character.MIN_VALUE) {
+            return (subQuery.startsWith(String.valueOf(getQuotation())) && subQuery.endsWith(String.valueOf(getQuotation()))) || subQuery.matches("^\\S+$");
+        } else {
+            return subQuery.matches("^\\S$");
+        }
     }
 
-    /**
-     * This method parses the sub-query to the more complex form a {@link SubQuery}.
-     * This method will just wrap the parameter in a <code>SubQuery</code>.
-     *
-     * @param subQuery split part of the whole search query
-     * @return parsed value in form of a SubQuery
-     */
     @Override
     public SubQuery parse(String subQuery) {
-        // wrap the query
-        // add a percent character for usage in sql 'LIKE()'
+        System.out.println("parse");
+        System.out.println(subQuery);
+
         return new SubQuery("text", "simple", "%" + subQuery + "%");
     }
 }

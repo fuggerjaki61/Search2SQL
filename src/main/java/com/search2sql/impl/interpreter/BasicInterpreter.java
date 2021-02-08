@@ -29,6 +29,7 @@ import java.util.Map;
  * @author fuggerjaki61
  * @since 0.0.1
  */
+@Deprecated
 public class BasicInterpreter extends Interpreter {
 
     /**

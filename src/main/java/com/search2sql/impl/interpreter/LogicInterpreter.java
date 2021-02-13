@@ -17,25 +17,26 @@ import java.util.*;
 
 public class LogicInterpreter extends Interpreter {
 
-    private final boolean supportsLogicOperators;
-
     private final String keywordAnd;
     private final String keywordOr;
     private final String keywordNot;
 
+    private final SubQuery queryAnd;
+    private final SubQuery queryOr;
+    private final SubQuery queryNot;
+
     public LogicInterpreter() {
-        this(true);
+        this("and", "or", "not");
     }
 
-    public LogicInterpreter(boolean supportsLogicOperators) {
-        this(supportsLogicOperators, "and", "or", "not");
-    }
-
-    public LogicInterpreter(boolean supportsLogicOperators, String keywordAnd, String keywordOr, String keywordNot) {
-        this.supportsLogicOperators = supportsLogicOperators;
+    public LogicInterpreter(String keywordAnd, String keywordOr, String keywordNot) {
         this.keywordAnd = keywordAnd;
         this.keywordOr = keywordOr;
         this.keywordNot = keywordNot;
+
+        this.queryAnd = new SubQuery(null, null, "logic.connector.and", null);
+        this.queryOr = new SubQuery(null, null, "logic.connector.or", null);
+        this.queryNot = new SubQuery(null, null, "logic.operator.not", null);
     }
 
     @Override
@@ -53,69 +54,64 @@ public class LogicInterpreter extends Interpreter {
         List<String> split = split(search, parsers.keySet());
 
         mainLoop:
-        for (String s : split) {
-            SubQuery previous;
+        for (ListIterator<String> iterator = split.listIterator(); iterator.hasNext(); ) {
+            int index = iterator.nextIndex();
+            String current = iterator.next();
 
-            if (subQueries.size() == 0) {
-                previous = new SubQuery();
+            boolean isFirst = index <= 0;
+            boolean isLast = index >= split.size() - 1;
+
+            SubQuery previous = subQueries.size() <= 0 ? new SubQuery() : subQueries.getLast();
+
+            if (isFirst) {
+                if (keywordNot.equalsIgnoreCase(current)) {
+                    subQueries.add(queryNot);
+
+                    continue;
+                }
             } else {
-                previous = subQueries.getLast();
+                if (queryAnd.getType().equalsIgnoreCase(previous.getType())
+                        || queryOr.getType().equalsIgnoreCase(previous.getType())) {
+                    if (keywordNot.equalsIgnoreCase(current)) {
+                        if (!isLast) {
+                            subQueries.add(queryNot);
+
+                            continue;
+                        }
+                    }
+                } else {
+                   if (!queryNot.getType().equalsIgnoreCase(previous.getType())) {
+                       if (isLast) {
+                           subQueries.add(queryOr);
+                       } else {
+                            if (keywordAnd.equalsIgnoreCase(current)) {
+                                subQueries.add(queryAnd);
+
+                                continue;
+                            } else {
+                                if (keywordOr.equalsIgnoreCase(current)) {
+                                    subQueries.add(queryOr);
+
+                                    continue;
+                                } else {
+                                    if (keywordNot.equalsIgnoreCase(current)) {
+                                        subQueries.add(queryOr);
+                                        subQueries.add(queryNot);
+
+                                        continue;
+                                    } else {
+                                        subQueries.add(queryOr);
+                                    }
+                                }
+                            }
+                       }
+                   }
+                }
             }
-
-            if (keywordAnd.equalsIgnoreCase(s)
-                    && !"logic.connector.and".equalsIgnoreCase(previous.getType())
-                    && !"logic.connector.or".equalsIgnoreCase(previous.getType())
-                    && !"logic.operator.not".equalsIgnoreCase(previous.getType())
-                    && subQueries.size() != 0) {
-
-            }
-
-//            if (keywordAnd.equalsIgnoreCase(s)) {
-//                if (!"logic.connector.and".equalsIgnoreCase(previous.getType())
-//                        && !"logic.connector.or".equalsIgnoreCase(previous.getType())
-//                        && !"logic.operator.not".equalsIgnoreCase(previous.getType())
-//                        && subQueries.size() != 0) {
-//                    subQueries.add(new SubQuery(null, null, "logic.connector.and", null));
-//
-//                    continue;
-//                }
-//            }
-//
-//            if (keywordOr.equalsIgnoreCase(s)) {
-//                if (!"logic.connector.or".equalsIgnoreCase(previous.getType())
-//                        && !"logic.connector.and".equalsIgnoreCase(previous.getType())
-//                        && !"logic.operator.not".equalsIgnoreCase(previous.getType())
-//                        && subQueries.size() != 0) {
-//                    subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
-//
-//                    continue;
-//                }
-//            }
-//
-//            if (keywordNot.equalsIgnoreCase(s)) {
-//                if (!"logic.operator.not".equalsIgnoreCase(previous.getType())
-//                        && subQueries.size() != split.size() - 1) {
-//                    if (!"logic.connector.and".equalsIgnoreCase(previous.getType())
-//                            && !"logic.connector.or".equalsIgnoreCase(previous.getType())) {
-//                        subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
-//                    }
-//
-//                    subQueries.add(new SubQuery(null, null, "logic.operator.not", null));
-//
-//                    continue;
-//                }
-//            }
-//
-//            if (!"logic.connector.and".equalsIgnoreCase(previous.getType())
-//                    && !"logic.connector.or".equalsIgnoreCase(previous.getType())
-//                    && !"logic.operator.not".equalsIgnoreCase(previous.getType())
-//                    && subQueries.size() != 0) {
-//                subQueries.add(new SubQuery(null, null, "logic.connector.or", null));
-//            }
 
             for (Map.Entry<Parser, String[]> parserEntry : parsers.entrySet()) {
-                if (parserEntry.getKey().isParserFor(s)) {
-                    SubQuery subQuery = parserEntry.getKey().parse(s);
+                if (parserEntry.getKey().isParserFor(current)) {
+                    SubQuery subQuery = parserEntry.getKey().parse(current);
 
                     subQuery.setColumnName((parserEntry.getValue()[0] != null ? parserEntry.getValue()[0] + "." : "") + parserEntry.getValue()[1]);
 
@@ -299,10 +295,6 @@ public class LogicInterpreter extends Interpreter {
         }
 
         return result;
-    }
-
-    public boolean supportsLogicOperators() {
-        return supportsLogicOperators;
     }
 
     public String getKeywordAnd() {

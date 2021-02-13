@@ -17,4 +17,13 @@ public abstract class QuotedParser extends Parser {
     public char getQuotation() {
         return quotation;
     }
+
+    @Override
+    public boolean isParserFor(String subQuery) {
+        if (quotation == Character.MIN_VALUE) {
+            return false;
+        }
+
+        return subQuery != null && subQuery.matches("^\\s*" + quotation + ".*" + quotation + "\\s*$");
+    }
 }

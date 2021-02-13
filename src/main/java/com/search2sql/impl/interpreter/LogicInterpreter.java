@@ -53,7 +53,6 @@ public class LogicInterpreter extends Interpreter {
 
         List<String> split = split(search, parsers.keySet());
 
-        mainLoop:
         for (ListIterator<String> iterator = split.listIterator(); iterator.hasNext(); ) {
             int index = iterator.nextIndex();
             String current = iterator.next();
@@ -80,10 +79,10 @@ public class LogicInterpreter extends Interpreter {
                         }
                     }
                 } else {
-                   if (!queryNot.getType().equalsIgnoreCase(previous.getType())) {
-                       if (isLast) {
-                           subQueries.add(queryOr);
-                       } else {
+                    if (!queryNot.getType().equalsIgnoreCase(previous.getType())) {
+                        if (isLast) {
+                            subQueries.add(queryOr);
+                        } else {
                             if (keywordAnd.equalsIgnoreCase(current)) {
                                 subQueries.add(queryAnd);
 
@@ -104,10 +103,14 @@ public class LogicInterpreter extends Interpreter {
                                     }
                                 }
                             }
-                       }
-                   }
+                        }
+                    }
                 }
             }
+
+            boolean parsed = false;
+
+            subQueries.add(new SubQuery(null, "sql.bracket.open", null));
 
             for (Map.Entry<Parser, String[]> parserEntry : parsers.entrySet()) {
                 if (parserEntry.getKey().isParserFor(current)) {
@@ -115,13 +118,21 @@ public class LogicInterpreter extends Interpreter {
 
                     subQuery.setColumnName((parserEntry.getValue()[0] != null ? parserEntry.getValue()[0] + "." : "") + parserEntry.getValue()[1]);
 
+                    if (parsed) {
+                        subQueries.add(queryOr);
+                    }
+
                     subQueries.add(subQuery);
 
-                    continue mainLoop;
+                    parsed = true;
                 }
             }
 
-            throw new InvalidSearchException(1);
+            subQueries.add(new SubQuery(null, "sql.bracket.close", null));
+
+            if (!parsed) {
+                throw new InvalidSearchException(1);
+            }
         }
 
         return new Query(search, tableConfig, subQueries);
@@ -203,13 +214,15 @@ public class LogicInterpreter extends Interpreter {
                             String suffix = null;
 
                             if (current.matches("^" + range + ".*")) {
-                                if (iterator.hasPrevious()) {
+                                if (index > 0) {
                                     prefix = split.get(index - 1);
                                 }
 
                                 delimiter = current;
 
-                                result.remove(result.size() - 1);
+                                if (index > 0) {
+                                    result.remove(result.size() - 1);
+                                }
                             } else {
                                 prefix = current.split(range)[0];
                             }
@@ -217,9 +230,9 @@ public class LogicInterpreter extends Interpreter {
                             if (current.matches(".*" + range + "$")) {
                                 if (iterator.hasNext()) {
                                     suffix = split.get(index + 1);
-                                }
 
-                                iterator.next();
+                                    iterator.next();
+                                }
                             } else {
                                 suffix = current.split(range)[1];
                             }

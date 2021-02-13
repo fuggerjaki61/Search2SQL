@@ -30,7 +30,6 @@ import com.search2sql.query.SubQuery;
  * <br><br>
  * <b>Known Implementations</b><br>
  * {@link com.search2sql.impl.parser.TextParser com.searchflow.impl.parser.TextParser}<br>
- * {@link com.search2sql.impl.parser.IntParser com.searchflow.impl.parser.IntParser}
  *
  * @author fuggerjaki61
  * @since 0.0.1
@@ -50,9 +49,8 @@ public abstract class Parser {
      *
      * @param subQuery split part of the whole search query
      * @return boolean indicating if this parser can be used to parse this sub-query
-     * @throws InvalidSearchException thrown if a problem occurred while parsing
      */
-    public abstract boolean isParserFor(String subQuery) throws InvalidSearchException;
+    public abstract boolean isParserFor(String subQuery);
 
     /**
      * This method is essential for the first phase <code>Parsing</code>.

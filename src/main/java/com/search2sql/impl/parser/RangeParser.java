@@ -9,7 +9,7 @@ public abstract class RangeParser extends Parser {
     private final char quotation;
 
     public RangeParser() {
-        this("[\\.]{2,3}");
+        this("\\.{2,3}");
     }
 
     public RangeParser(String delimiter) {
@@ -19,6 +19,15 @@ public abstract class RangeParser extends Parser {
     public RangeParser(String delimiter, char quotation) {
         this.delimiter = delimiter;
         this.quotation = quotation;
+    }
+
+    @Override
+    public boolean isParserFor(String subQuery) {
+        if (delimiter == null) {
+            return false;
+        }
+
+        return subQuery.matches("^.*" + delimiter + ".*$");
     }
 
     public String getDelimiter() {

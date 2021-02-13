@@ -31,11 +31,12 @@ public class ParserLoader {
                 Object o = in.readObject();
 
                 parsers = Collections.unmodifiableMap((Map<String, Class<?>>) o);
-            } catch (IOException | ClassNotFoundException e) {
-                throw new IllegalUseException(String.format("An error occurred while trying to deserialize the persisted " +
-                        "parser from the file '%s'.", file.getAbsolutePath()), e);
-            } catch (ClassCastException e) {
-                initialize(true);
+            } catch (Exception e) {
+                if (!forceUpdate) {
+                    initialize(true);
+                } else {
+                    e.printStackTrace();
+                }
             }
         } else {
             Reflections reflections = new Reflections(
@@ -91,6 +92,10 @@ public class ParserLoader {
     }
 
     public static Parser loadParser(String id) {
+        return loadParser(id, false);
+    }
+
+    private static Parser loadParser(String id, boolean alreadyReloaded) {
         if (parsers == null || parsers.isEmpty()) {
             initialize();
         }
@@ -115,7 +120,13 @@ public class ParserLoader {
                         parserClass.getName()), e);
             }
         } else {
-            throw new IllegalUseException(String.format("Couldn't find a parser with id '%s'.", parserId.getId()));
+            if (!alreadyReloaded) {
+                initialize(true);
+
+                return loadParser(id, true);
+            } else {
+                throw new IllegalUseException(String.format("Couldn't find a parser with id '%s'.", parserId.getId()));
+            }
         }
     }
 }

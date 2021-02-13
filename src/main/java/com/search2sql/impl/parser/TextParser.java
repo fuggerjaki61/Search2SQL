@@ -32,18 +32,20 @@ public class TextParser extends QuotedParser {
     }
 
     public boolean isParserFor(String subQuery) {
-        if (getQuotation() != Character.MIN_VALUE) {
-            return (subQuery.startsWith(String.valueOf(getQuotation())) && subQuery.endsWith(String.valueOf(getQuotation()))) || subQuery.matches("^\\S+$");
-        } else {
-            return subQuery.matches("^\\S$");
-        }
+        return super.isParserFor(subQuery) || subQuery.matches("^\\S+$");
     }
 
     @Override
     public SubQuery parse(String subQuery) {
-        System.out.println("parse");
-        System.out.println(subQuery);
+        if (super.isParserFor(subQuery)) {
+            String processed = subQuery;
 
-        return new SubQuery("text", "simple", "%" + subQuery + "%");
+            processed = processed.replaceAll("^\\s*" + getQuotation(), "");
+            processed = processed.replaceAll(getQuotation() + "\\s*$", "");
+
+            return new SubQuery("default.text", "quote", "%" + processed + "%");
+        }
+
+        return new SubQuery("default.text", "simple", "%" + subQuery + "%");
     }
 }

@@ -32,12 +32,16 @@ import java.util.regex.Pattern;
 public abstract class QuotedParser extends Parser {
 
     /**
-     *
+     * This final char field contains the value of the quote that is used for parsing. It is set by the constructor and can't
+     * be changed after that.
+     * <br><br>
+     * If no custom value was set, it defaults to <code>"</code> (double quotes).
      */
     private final char quotation;
 
     /**
-     *
+     * This final string field contains the generated regex that is used to match the sub query. This regex is based on
+     * the quotation character used.
      */
     private final String regex;
 

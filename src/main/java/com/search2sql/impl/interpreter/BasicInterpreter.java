@@ -3,6 +3,7 @@ package com.search2sql.impl.interpreter;
 import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.impl.interpreter.util.ParserLoader;
 import com.search2sql.impl.parser.QuotedParser;
+import com.search2sql.impl.parser.provided.TextParser;
 import com.search2sql.interpreter.Interpreter;
 import com.search2sql.parser.Parser;
 import com.search2sql.query.Query;
@@ -23,7 +24,7 @@ import java.util.Map;
  * This Interpreter splits the search expression by any whitespaces except the interpreter notices a quote. Quotes can
  * be started with any single char but it is recommended that it is a special character like <code>"</code> or
  * <code>'</code>. These special characters are defined over the {@link QuotedParser} and any subclass of it
- * (e.g. {@link com.search2sql.impl.parser.TextParser TextParser}). After the query was split, the generated sub-queries
+ * (e.g. {@link TextParser TextParser}). After the query was split, the generated sub-queries
  * are processed. Every parser will try to parse every sub-query. Therefore an 11 can be parsed as a number or as text.
  *
  * @author fuggerjaki61

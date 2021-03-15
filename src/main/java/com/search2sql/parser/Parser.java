@@ -1,6 +1,7 @@
 package com.search2sql.parser;
 
 import com.search2sql.exception.InvalidSearchException;
+import com.search2sql.impl.parser.provided.TextParser;
 import com.search2sql.query.SubQuery;
 
 /**
@@ -29,7 +30,7 @@ import com.search2sql.query.SubQuery;
  * {@link com.search2sql.interpreter.Interpreter com.searchflow.interpreter.Interpreter}
  * <br><br>
  * <b>Known Implementations</b><br>
- * {@link com.search2sql.impl.parser.TextParser com.searchflow.impl.parser.TextParser}<br>
+ * {@link TextParser com.searchflow.impl.parser.TextParser}<br>
  *
  * @author fuggerjaki61
  * @since 0.0.1

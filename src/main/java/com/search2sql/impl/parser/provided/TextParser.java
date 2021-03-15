@@ -1,5 +1,6 @@
-package com.search2sql.impl.parser;
+package com.search2sql.impl.parser.provided;
 
+import com.search2sql.impl.parser.QuotedParser;
 import com.search2sql.query.SubQuery;
 import com.search2sql.parser.Parser;
 import com.search2sql.parser.SearchParser;

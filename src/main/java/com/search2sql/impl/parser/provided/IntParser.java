@@ -1,6 +1,7 @@
-package com.search2sql.impl.parser;
+package com.search2sql.impl.parser.provided;
 
 import com.search2sql.exception.InvalidSearchException;
+import com.search2sql.impl.parser.RangeParser;
 import com.search2sql.parser.SearchParser;
 import com.search2sql.query.SubQuery;
 
@@ -8,21 +9,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SearchParser("default.int")
-public class IntegerParser extends RangeParser {
+public class IntParser extends RangeParser {
 
     private static final String normalRegex = "^\\s*(?:|\\+|-)\\d+\\s*$";
 
     private final String rangeRegex;
 
-    public IntegerParser() {
+    public IntParser() {
         this(true);
     }
 
-    public IntegerParser(boolean range) {
+    public IntParser(boolean range) {
         this(range ? "\\.{2,3}" : null);
     }
 
-    public IntegerParser(String delimiter) {
+    public IntParser(String delimiter) {
         super(delimiter);
 
         rangeRegex = "^\\s*(?:|\\+|-)\\d*\\s*" + delimiter + "\\s*(?:|\\+|-)\\d*\\s*$";

@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This an abstract parser that can be implemented to inherit the ability to parse quoted values like <i>"text in quotes"</i>.
+ * This an abstract parser that can be extended to inherit the ability to parse quoted values like <i>"text in quotes"</i>.
  * <br><br>
  * <b>Important</b><br>
  * The abilities this parser has are based on the interpreter used. The deprecated {@link com.search2sql.impl.interpreter.BasicInterpreter BasicInterpreter}

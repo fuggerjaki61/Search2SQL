@@ -3,6 +3,7 @@ package com.search2sql.query;
 import com.search2sql.table.TableConfig;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This is basic DTO used for the transfer between the {@link com.search2sql.interpreter.Interpreter Interpreter} and
@@ -35,7 +36,7 @@ public class Query {
      * This list was generated in the <code>Interpreting</code> phase and is the most important information
      * transmitted.
      */
-    private LinkedList<SubQuery> subQueries;
+    private List<SubQuery> subQueries;
 
     /**
      * Basic constructor that does nothing beside initializing an empty list.
@@ -46,24 +47,13 @@ public class Query {
     }
 
     /**
-     * Basic constructor meant to provide a shortcut that initializes an empty list of sub-queries.
-     *
-     * @param original original string search query
-     * @param tableConfig meta-information about the table layout
-     */
-    public Query(String original, TableConfig tableConfig) {
-        // passes values on and initializes list
-        this(original, tableConfig, new LinkedList<>());
-    }
-
-    /**
      * Basic constructor that does nothing beside initializing this object's attributes.
      *
      * @param original original string search query
      * @param tableConfig meta-information about the table layout
      * @param subQueries parsed and interpreted, split sub-queries
      */
-    public Query(String original, TableConfig tableConfig, LinkedList<SubQuery> subQueries) {
+    public Query(String original, TableConfig tableConfig, List<SubQuery> subQueries) {
         this.original = original;
         this.tableConfig = tableConfig;
         this.subQueries = subQueries;
@@ -121,7 +111,7 @@ public class Query {
      *
      * @return the sub queries
      */
-    public LinkedList<SubQuery> getSubQueries() {
+    public List<SubQuery> getSubQueries() {
         return subQueries;
     }
 
@@ -132,5 +122,14 @@ public class Query {
      */
     public void setSubQueries(LinkedList<SubQuery> subQueries) {
         this.subQueries = subQueries;
+    }
+
+    @Override
+    public String toString() {
+        return "Query{" +
+                "original='" + original + '\'' +
+                ", tableConfig=" + tableConfig +
+                ", subQueries=" + subQueries +
+                '}';
     }
 }

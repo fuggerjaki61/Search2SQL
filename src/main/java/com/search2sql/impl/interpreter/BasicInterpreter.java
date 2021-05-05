@@ -3,6 +3,7 @@ package com.search2sql.impl.interpreter;
 import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.impl.interpreter.util.ParserLoader;
 import com.search2sql.impl.parser.QuotedParser;
+import com.search2sql.impl.parser.provided.TextParser;
 import com.search2sql.interpreter.Interpreter;
 import com.search2sql.parser.Parser;
 import com.search2sql.query.Query;
@@ -23,12 +24,13 @@ import java.util.Map;
  * This Interpreter splits the search expression by any whitespaces except the interpreter notices a quote. Quotes can
  * be started with any single char but it is recommended that it is a special character like <code>"</code> or
  * <code>'</code>. These special characters are defined over the {@link QuotedParser} and any subclass of it
- * (e.g. {@link com.search2sql.impl.parser.TextParser TextParser}). After the query was split, the generated sub-queries
+ * (e.g. {@link TextParser TextParser}). After the query was split, the generated sub-queries
  * are processed. Every parser will try to parse every sub-query. Therefore an 11 can be parsed as a number or as text.
  *
  * @author fuggerjaki61
  * @since 0.0.1
  */
+@Deprecated
 public class BasicInterpreter extends Interpreter {
 
     /**
@@ -46,7 +48,7 @@ public class BasicInterpreter extends Interpreter {
     @Override
     public Query interpret(String searchQuery, TableConfig tableConfig) throws InvalidSearchException {
         // instantiate new query
-        Query result = new Query(searchQuery, tableConfig);
+        Query result = new Query(searchQuery, tableConfig, new LinkedList<>());
 
         // initialize new map with id and its loaded parsers
         // this map saves all parsers with its id so it has only to loaded once
@@ -59,7 +61,7 @@ public class BasicInterpreter extends Interpreter {
                 // check if parser already exists
                 if (!parsers.containsKey(column.getParserId())) {
                     // if not, load and add it
-                    parsers.put(column.getParserId(), ParserLoader.getParser(column.getParserId()));
+                    parsers.put(column.getParserId(), ParserLoader.loadParser(column.getParserId()));
                 }
             }
         }
@@ -109,7 +111,7 @@ public class BasicInterpreter extends Interpreter {
         // checks if there is a result
         if (!result.getSubQueries().isEmpty()) {
             // there are results, but the last one is always an 'OR'
-            result.getSubQueries().removeLast();
+            result.getSubQueries().remove(result.getSubQueries().size() - 1);
         }
 
         // return interpreted, complete Query
@@ -135,7 +137,7 @@ public class BasicInterpreter extends Interpreter {
                     QuotedParser quotedParser = (QuotedParser) parser;
 
                     // get&add delimiter to set
-                    quotationChars.add(quotedParser.getQuotationChar());
+                    quotationChars.add(quotedParser.getQuotation());
                 }
             }
         }

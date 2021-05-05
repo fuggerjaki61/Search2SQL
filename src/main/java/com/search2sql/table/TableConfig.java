@@ -50,4 +50,11 @@ public class TableConfig {
     public Set<Table> getTables() {
         return tables;
     }
+
+    @Override
+    public String toString() {
+        return "TableConfig{" +
+                "tables=" + tables +
+                '}';
+    }
 }

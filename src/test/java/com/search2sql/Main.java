@@ -3,7 +3,7 @@ package com.search2sql;
 import com.search2sql.exception.InvalidSearchException;
 import com.search2sql.exception.i18n.LocalizedExceptionHandler;
 import com.search2sql.exception.i18n.ExceptionHandler;
-import com.search2sql.impl.interpreter.BasicInterpreter;
+import com.search2sql.impl.interpreter.LogicInterpreter;
 import com.search2sql.impl.translator.FileTranslator;
 import com.search2sql.table.Column;
 import com.search2sql.table.Table;
@@ -31,7 +31,7 @@ public class Main {
         Translator translator = new FileTranslator("some.properties");
 
         // configure the table
-        TableConfig tableConfig = new TableConfig(new Table("table", new Column("column", ParserTypes.TEXT)));
+        TableConfig tableConfig = new TableConfig(new Table("table", new Column("column", ParserTypes.TEXT), new Column("other", ParserTypes.INT)));
 
         // print out help
         System.out.println("Type a search query or enter 'exit' to exit.");
@@ -57,7 +57,7 @@ public class Main {
 
                 try {
                     // translate it to sql
-                    String sql = translator.translate(new BasicInterpreter().interpret(input, tableConfig));
+                    String sql = translator.translate(new LogicInterpreter().interpret(input, tableConfig));
 
                     // gets time used for generating query
                     time = System.currentTimeMillis() - time;

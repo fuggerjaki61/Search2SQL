@@ -81,4 +81,12 @@ public class Table {
     public Set<Column> getColumns() {
         return columns;
     }
+
+    @Override
+    public String toString() {
+        return "Table{" +
+                "prefix='" + prefix + '\'' +
+                ", columns=" + columns +
+                '}';
+    }
 }

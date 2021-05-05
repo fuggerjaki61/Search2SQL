@@ -113,7 +113,7 @@ public class FileTranslator extends Translator {
                 sql.append(" ");
             } else {
                 throw new IllegalUseException(String.format("The property %s couldn't be found! Please" +
-                        "add it to your .properties file.", resolvePropertyKey(subQuery.getParserId(), subQuery.getType())));
+                        " add it to your .properties file.", resolvePropertyKey(subQuery.getParserId(), subQuery.getType())));
             }
         }
 

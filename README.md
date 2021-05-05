@@ -1,5 +1,5 @@
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/fuggerjaki61/search2sql) [![Build Status](https://travis-ci.org/fuggerjaki61/search2sql.svg?branch=master)](https://travis-ci.org/fuggerjaki61/search2sql) 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fuggerjaki61/search2sql) [![Build Status](https://travis-ci.com/fuggerjaki61/Search2SQL.svg?branch=master)](https://travis-ci.com/fuggerjaki61/Search2SQL)
 
 # Search2SQL
 

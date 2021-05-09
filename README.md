@@ -16,16 +16,6 @@ Search2SQL is a Java library that can be used to convert search expressions to a
 
 [Wiki](https://github.com/fuggerjaki61/Search2SQL/wiki) | [Full Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Full-Documentation) | [Quick Documentation](https://github.com/fuggerjaki61/Search2SQL/wiki/Quick-Documentation)
 
-### Usage
-Maven:
-```xml
-<dependency>
-  <groupId>com.search2sql</groupId>
-  <artifactId>search2sql</artifactId>
-  <version>1.2-bravo</version>
-</dependency>
-```
-
 ### License
 
 Search2SQL is released under the [MIT License](LICENSE).

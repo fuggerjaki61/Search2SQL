@@ -7,8 +7,8 @@ import org.reflections8.Reflections;
 import org.reflections8.scanners.FieldAnnotationsScanner;
 import org.reflections8.scanners.SubTypesScanner;
 import org.reflections8.scanners.TypeAnnotationsScanner;
+import org.reflections8.util.ConfigurationBuilder;
 
-import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
@@ -17,86 +17,51 @@ public class ParserLoader {
     private static Map<String, Class<?>> parsers;
 
     public static void initialize() {
-        initialize(false);
-    }
+        ConfigurationBuilder config = ConfigurationBuilder
+                .build()
+                .setScanners(
+                        new TypeAnnotationsScanner(),
+                        new SubTypesScanner(),
+                        new FieldAnnotationsScanner())
+                .useParallelExecutor();
 
-    public static void initialize(boolean forceUpdate) {
-        String path = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath() + "persisted";
-        File file = new File(path);
+        Reflections reflections = new Reflections(config);
 
-        if (file.exists() && !forceUpdate) {
-            try {
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(SearchParser.class);
 
-                Object o = in.readObject();
+        Map<String, Class<?>> temp = new HashMap<>();
 
-                parsers = Collections.unmodifiableMap((Map<String, Class<?>>) o);
-            } catch (Exception e) {
-                if (!forceUpdate) {
-                    initialize(true);
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            Reflections reflections = new Reflections(
-                    new TypeAnnotationsScanner(),
-                    new SubTypesScanner(),
-                    new FieldAnnotationsScanner());
+        for (Class<?> parser : classes) {
+            SearchParser annotation = parser.getAnnotation(SearchParser.class);
 
-            Set<Class<?>> classes = reflections.getTypesAnnotatedWith(SearchParser.class);
-
-            Map<String, Class<?>> temp = new HashMap<>();
-
-            for (Class<?> parser : classes) {
-                SearchParser annotation = parser.getAnnotation(SearchParser.class);
-
-                if (!annotation.value().isEmpty()) {
-                    if (annotation.value().trim().matches("^\\S+$")) {
-                        if (Parser.class.isAssignableFrom(parser)) {
-                            if (!temp.containsKey(annotation.value())) {
-                                temp.put(annotation.value(), parser);
-                            } else {
-                                throw new IllegalUseException(String.format("'%s' and '%s' specify the same id '%s'. You can't have duplicate parser ids.",
-                                        temp.get(annotation.value()).getName(), parser.getName(), annotation.value()));
-                            }
+            if (!annotation.value().isEmpty()) {
+                if (annotation.value().trim().matches("^\\S+$")) {
+                    if (Parser.class.isAssignableFrom(parser)) {
+                        if (!temp.containsKey(annotation.value())) {
+                            temp.put(annotation.value(), parser);
                         } else {
-                            throw new IllegalUseException(String.format("The parser '%s' defines the @SearchParser annotation " +
-                                    "but doesn't inherit the 'com.parser.Parser' class.", parser.getName()));
+                            throw new IllegalUseException(String.format("'%s' and '%s' specify the same id '%s'. You can't have duplicate parser ids.",
+                                    temp.get(annotation.value()).getName(), parser.getName(), annotation.value()));
                         }
                     } else {
-                        throw new IllegalUseException(String.format("The parser '%s' defines the id '%s' that contains a whitespace. That's invalid!",
-                                parser.getName(), annotation.value()));
+                        throw new IllegalUseException(String.format("The parser '%s' defines the @SearchParser annotation " +
+                                "but doesn't inherit the 'com.parser.Parser' class.", parser.getName()));
                     }
                 } else {
-                    throw new IllegalUseException(String.format("The parser '%s' defines an empty string as its id. That's invalid!",
-                            parser.getName()));
+                    throw new IllegalUseException(String.format("The parser '%s' defines the id '%s' that contains a whitespace. That's invalid!",
+                            parser.getName(), annotation.value()));
                 }
-            }
-
-            parsers = Collections.unmodifiableMap(temp);
-
-            try {
-                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-
-                out.writeObject(parsers);
-
-                out.flush();
-
-                out.close();
-            } catch (IOException e) {
-                throw new IllegalUseException(String.format("An error occurred while persisting the set of parsers" +
-                        "in the file '%s'.", file.getAbsolutePath()), e);
+            } else {
+                throw new IllegalUseException(String.format("The parser '%s' defines an empty string as its id. That's invalid!",
+                        parser.getName()));
             }
         }
+
+        parsers = Collections.unmodifiableMap(temp);
     }
 
     public static Parser loadParser(String id) {
-        return loadParser(id, false);
-    }
-
-    private static Parser loadParser(String id, boolean alreadyReloaded) {
-        if (parsers == null || parsers.isEmpty()) {
+        if (parsers == null) {
             initialize();
         }
 
@@ -120,13 +85,7 @@ public class ParserLoader {
                         parserClass.getName()), e);
             }
         } else {
-            if (!alreadyReloaded) {
-                initialize(true);
-
-                return loadParser(id, true);
-            } else {
-                throw new IllegalUseException(String.format("Couldn't find a parser with id '%s'.", parserId.getId()));
-            }
+            throw new IllegalUseException(String.format("Couldn't find a parser with id '%s'.", parserId.getId()));
         }
     }
 }
